@@ -1,0 +1,2 @@
+export const MIN_TRANSCRIPT_CHARS = 100
+export const MAX_TRANSCRIPT_CHARS = 50000
