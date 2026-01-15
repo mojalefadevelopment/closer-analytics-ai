@@ -132,6 +132,65 @@ Niet: feature-completeness, schaalbaarheid, of polish.
 
 ---
 
+## Questionnaire (Context Boost)
+
+Goal: capture 3-5 multiple-choice answers that steer the analysis and reduce generic output.
+
+UI placement (assumption): inline above the transcript input, collapsed to a single row on mobile.
+
+Design direction: light + fresh, subtle glassmorphism (frosted glass), accent color `#7dd3fc`.
+
+### MVP Question Set (5)
+
+1) Call type
+- Discovery
+- Objection handling
+- Closing
+- Follow-up
+
+2) Deal size
+- 3k-6k
+- 6k-15k
+- 15k-50k
+
+3) Decision maker status
+- Yes, direct decision maker
+- Shared decision
+- Not sure yet
+
+4) Primary objection
+- Price
+- Timing
+- Trust
+- Offer fit
+- Authority
+
+5) Desired outcome for this call
+- Clear next step
+- Handle objection
+- Move to close
+- Qualify / disqualify
+
+### Prompt injection (concept)
+
+Add a short "Questionnaire Context" block before the transcript:
+
+```
+QUESTIONNAIRE CONTEXT:
+- Call type: {callType}
+- Deal size: {dealSize}
+- Decision maker: {decisionMaker}
+- Primary objection: {primaryObjection}
+- Desired outcome: {desiredOutcome}
+```
+
+Keep it short and literal. No free-text fields in MVP.
+
+Internal framework (MVP v2): map questionnaire answers to prompt emphasis
+(e.g., objection type drives question focus). Not user-configurable yet.
+
+---
+
 ## Technical Specification
 
 ### Architecture (Minimaal)
@@ -440,6 +499,56 @@ export default function CoachingAnalyze() {
 | **Beknoptheid** | Hele output past op 1 scherm | Max 400 woorden |
 | **Eerlijkheid** | Geen bullshit of vage adviezen | Geen "probeer", "misschien" |
 | **Prioritering** | Duidelijk wat #1 is | Eén priority item |
+
+---
+
+## First 4 Hours Plan (Questionnaire Upgrade)
+
+### Research Plan (timebox)
+- [ ] Locate current input/output components and mock data
+  Output: list of exact files + insertion points for questionnaire
+  Acceptance: transcript input, analysis output, and mock data paths identified
+- [ ] Define questionnaire schema + defaults
+  Output: JSON shape + 5 MC options per field
+  Acceptance: no free-text fields; matches PRD question set
+- [ ] Confirm UI placement + styling tokens
+  Output: layout choice (inline above transcript) + accent color `#7dd3fc`
+  Acceptance: aligns with "light, fresh, frosted glass" direction
+
+### Implementation Plan (timebox)
+- [ ] Add questionnaire UI (MC selects or pills) to the transcript input section
+  Output: visible questionnaire with 5 fields
+  Acceptance: all options selectable; works on mobile
+- [ ] Extend analysis request payload with questionnaire answers
+  Output: request includes questionnaire context
+  Acceptance: payload shape validated in the client
+- [ ] Update mock analysis prompt/context (or placeholder) to include questionnaire block
+  Output: prompt/context string includes questionnaire values
+  Acceptance: values are injected in a fixed block
+- [ ] Update output layout to show questionnaire context (small summary chip row)
+  Output: compact summary near results header
+  Acceptance: stays within one screen, no clutter
+- [ ] Manual validation checklist
+  Output: checklist in PRD for quick QA
+  Acceptance: can be executed in <10 minutes
+
+### Actionable Chunks
+- [ ] Chunk A: UI + state
+  Scope: questionnaire fields, defaults, validation, layout placement
+  Done when: all 5 fields render, update state, and are readable on mobile
+- [ ] Chunk B: Data + prompt wiring
+  Scope: payload shape, context block, mock data updates
+  Done when: payload includes questionnaire values and mock analysis reflects them
+- [ ] Chunk C: Output + QA
+  Scope: summary chips + checklist
+  Done when: summary is visible and checklist passes
+
+### Manual Validation Checklist
+- [ ] Questionnaire visible above transcript input on desktop and mobile
+- [ ] All 5 fields selectable; defaults set; no empty state blocking submit
+- [ ] Request payload includes questionnaire context block
+- [ ] Output header shows questionnaire summary chips
+- [ ] Layout remains single-screen on standard laptop viewport
 
 ---
 
