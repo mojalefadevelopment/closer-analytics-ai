@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { CoachingAnalysis } from '../types/coaching'
-import { mockAnalysis } from '../mocks/analysisResponse'
 import { MIN_TRANSCRIPT_CHARS } from '../lib/constants'
 
 export function useCoachingAnalysis() {
@@ -21,13 +20,23 @@ export function useCoachingAnalysis() {
     setError(null)
 
     try {
-      // Phase 1: Mock response with simulated delay
-      // Phase 2: Replace with Supabase function call
-      await new Promise((resolve) => setTimeout(resolve, 900))
-      setAnalysis(mockAnalysis)
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transcript: trimmedTranscript }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Analyse mislukt')
+      }
+
+      setAnalysis(data)
     } catch (err) {
-      setError('Analyse mislukt. Probeer opnieuw.')
-      console.error(err)
+      const message = err instanceof Error ? err.message : 'Analyse mislukt. Probeer opnieuw.'
+      setError(message)
+      console.error('Analysis error:', err)
     } finally {
       setLoading(false)
     }
