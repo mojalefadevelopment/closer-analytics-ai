@@ -1,4 +1,4 @@
-import OpenAI from 'openai'
+import Groq from 'groq-sdk'
 
 export const config = {
   runtime: 'edge',
@@ -59,7 +59,9 @@ ANALYSEER dit gesprek en geef feedback in EXACT dit JSON format:
       "insight": "[Wat dit onthult over de closer]"
     }
   ]
-}`
+}
+
+Geef ALLEEN valid JSON terug, geen andere tekst.`
 }
 
 export default async function handler(req: Request) {
@@ -81,6 +83,14 @@ export default async function handler(req: Request) {
   }
 
   try {
+    const apiKey = process.env.GROQ_API_KEY
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ error: 'API configuratie fout. Check GROQ_API_KEY.' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
     const { transcript } = await req.json()
 
     if (!transcript || typeof transcript !== 'string') {
@@ -99,24 +109,22 @@ export default async function handler(req: Request) {
 
     const truncatedTranscript = transcript.slice(0, 32000)
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
+    const groq = new Groq({ apiKey })
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      response_format: { type: 'json_object' },
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: buildUserPrompt(truncatedTranscript) },
       ],
       max_tokens: 1024,
       temperature: 0.3,
+      response_format: { type: 'json_object' },
     })
 
     const content = completion.choices[0]?.message?.content
     if (!content) {
-      throw new Error('No response from OpenAI')
+      throw new Error('No response from Groq')
     }
 
     const analysis: CoachingAnalysis = JSON.parse(content)
@@ -126,9 +134,14 @@ export default async function handler(req: Request) {
     })
 
   } catch (error) {
-    console.error('API error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('API error:', errorMessage)
+
     return new Response(
-      JSON.stringify({ error: 'Analyse mislukt. Probeer opnieuw.' }),
+      JSON.stringify({
+        error: 'Analyse mislukt. Probeer opnieuw.',
+        debug: errorMessage
+      }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
   }

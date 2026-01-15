@@ -14,7 +14,7 @@ export function AnalysisOutput({ analysis }: AnalysisOutputProps) {
       {/* Header */}
       <div className="flex justify-between items-center gap-4 flex-wrap">
         <div className="font-semibold text-lg">Analyse resultaat</div>
-        <Pill variant="subtle">Demo output</Pill>
+        <Pill variant="subtle">AI Coaching</Pill>
       </div>
 
       {/* Priority */}

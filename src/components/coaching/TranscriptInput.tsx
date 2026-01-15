@@ -48,7 +48,6 @@ export function TranscriptInput({
         <Button onClick={onAnalyze} disabled={!isValid} loading={loading}>
           Analyseer
         </Button>
-        <span className="text-sm text-text-muted">Demo output, geen backend gekoppeld.</span>
       </div>
 
       {/* Error */}

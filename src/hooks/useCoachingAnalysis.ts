@@ -8,12 +8,12 @@ export function useCoachingAnalysis() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function analyze() {
+  async function analyze(): Promise<boolean> {
     const trimmedTranscript = transcript.trim()
 
     if (trimmedTranscript.length < MIN_TRANSCRIPT_CHARS) {
       setError(`Plak een langer transcript (min ${MIN_TRANSCRIPT_CHARS} karakters).`)
-      return
+      return false
     }
 
     setLoading(true)
@@ -33,10 +33,12 @@ export function useCoachingAnalysis() {
       }
 
       setAnalysis(data)
+      return true
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Analyse mislukt. Probeer opnieuw.'
       setError(message)
       console.error('Analysis error:', err)
+      return false
     } finally {
       setLoading(false)
     }

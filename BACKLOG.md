@@ -195,12 +195,24 @@ MVP COMPLETE ─── Then P1/P2
 ## Environment Setup
 
 ```bash
-# 1. Anthropic API key
-supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
+# 1. OpenAI API key in .env.local
+OPENAI_API_KEY=sk-proj-...
 
-# 2. Deploy Edge Function
-supabase functions deploy coaching-analyze
+# 2. Local testing
+vercel dev
 
-# 3. Local testing
-supabase functions serve coaching-analyze --env-file .env.local
+# 3. Deploy
+vercel
 ```
+
+---
+
+## Future Features
+
+- [ ] **FEAT-01** Landing page with conversion-optimized copy
+  - Hero headline
+  - 3 benefit sections
+  - Social proof framework
+  - FAQ section
+  - 5 CTA variations
+  - Optimized for conversion psychology

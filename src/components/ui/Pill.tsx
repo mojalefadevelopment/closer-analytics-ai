@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 interface PillProps {
   children: ReactNode
-  variant?: 'default' | 'subtle'
+  variant?: 'default' | 'subtle' | 'accent'
   className?: string
 }
 
@@ -12,6 +12,7 @@ export function Pill({ children, variant = 'default', className = '' }: PillProp
   const variantStyles = {
     default: 'bg-white/80 border border-slate-300/35',
     subtle: 'bg-accent/10 text-accent-strong',
+    accent: 'bg-gradient-to-r from-accent to-accent-strong text-white font-medium',
   }
 
   return (
