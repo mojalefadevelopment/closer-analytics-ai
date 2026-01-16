@@ -15,22 +15,22 @@ interface ContextSelectorProps {
 }
 
 const experienceOptions = [
-  { id: 'starter', label: 'Starter', description: '0-1 jaar ervaring', icon: '🌱' },
-  { id: 'intermediate', label: 'Intermediate', description: '1-3 jaar ervaring', icon: '📈' },
-  { id: 'expert', label: 'Expert', description: '3+ jaar ervaring', icon: '🏆' },
+  { id: 'starter', label: 'Starter', description: '0-1 jaar ervaring' },
+  { id: 'intermediate', label: 'Intermediate', description: '1-3 jaar ervaring' },
+  { id: 'expert', label: 'Expert', description: '3+ jaar ervaring' },
 ] as const
 
 const focusOptions = [
-  { id: 'bezwaren', label: 'Bezwaren', description: 'Bezwaren ombuigen', icon: '🛡️' },
-  { id: 'afsluiting', label: 'Afsluiting', description: 'Deal closen', icon: '🎯' },
-  { id: 'rapport', label: 'Rapport', description: 'Connectie bouwen', icon: '🤝' },
-  { id: 'algemeen', label: 'Algemeen', description: 'Volledige review', icon: '📋' },
+  { id: 'bezwaren', label: 'Bezwaren', description: 'Bezwaren ombuigen' },
+  { id: 'afsluiting', label: 'Afsluiting', description: 'Deal closen' },
+  { id: 'rapport', label: 'Rapport', description: 'Connectie bouwen' },
+  { id: 'algemeen', label: 'Algemeen', description: 'Volledige review' },
 ] as const
 
 const goalOptions = [
-  { id: 'closes', label: 'Meer closes', description: 'Hogere close rate', icon: '✅' },
-  { id: 'tickets', label: 'Hogere tickets', description: 'Meer omzet per deal', icon: '💰' },
-  { id: 'gesprekken', label: 'Betere gesprekken', description: 'Kwaliteit verhogen', icon: '💬' },
+  { id: 'closes', label: 'Meer closes', description: 'Hogere close rate' },
+  { id: 'tickets', label: 'Hogere tickets', description: 'Meer omzet per deal' },
+  { id: 'gesprekken', label: 'Betere gesprekken', description: 'Kwaliteit verhogen' },
 ] as const
 
 export function ContextSelector({ context, onContextChange }: ContextSelectorProps) {
@@ -39,10 +39,10 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
   const isComplete = context.experience && context.focus && context.goal
 
   return (
-    <div className="grid gap-6 max-w-3xl mx-auto">
+    <div className="grid gap-10 max-w-3xl mx-auto py-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+        <h2 className="text-2xl font-bold text-slate-800 mb-3">
           Personaliseer je analyse
         </h2>
         <p className="text-slate-600">
@@ -51,7 +51,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
       </div>
 
       {/* Experience Level */}
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         <div className="flex items-center gap-2">
           <Pill variant="subtle">Ervaring</Pill>
         </div>
@@ -63,7 +63,6 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.experience === option.id}
               className="text-center"
             >
-              <div className="text-2xl mb-2">{option.icon}</div>
               <div className="font-semibold text-slate-800">{option.label}</div>
               <div className="text-xs text-slate-500 mt-1">{option.description}</div>
             </LiquidCard>
@@ -72,7 +71,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
       </div>
 
       {/* Focus Area */}
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         <div className="flex items-center gap-2">
           <Pill variant="subtle">Focus</Pill>
         </div>
@@ -84,7 +83,6 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.focus === option.id}
               className="text-center"
             >
-              <div className="text-2xl mb-2">{option.icon}</div>
               <div className="font-semibold text-slate-800 text-sm">{option.label}</div>
               <div className="text-xs text-slate-500 mt-1">{option.description}</div>
             </LiquidCard>
@@ -93,7 +91,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
       </div>
 
       {/* Goal */}
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         <div className="flex items-center gap-2">
           <Pill variant="subtle">Doel</Pill>
         </div>
@@ -105,7 +103,6 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.goal === option.id}
               className="text-center"
             >
-              <div className="text-2xl mb-2">{option.icon}</div>
               <div className="font-semibold text-slate-800">{option.label}</div>
               <div className="text-xs text-slate-500 mt-1">{option.description}</div>
             </LiquidCard>
@@ -114,7 +111,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between items-center pt-4">
+      <div className="flex justify-between items-center pt-6">
         <Button variant="ghost" onClick={prevStep}>
           ← Terug
         </Button>

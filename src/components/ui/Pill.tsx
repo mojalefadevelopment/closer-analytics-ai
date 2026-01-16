@@ -10,9 +10,9 @@ export function Pill({ children, variant = 'default', className = '' }: PillProp
   const baseStyles = 'px-3.5 py-1.5 rounded-full text-sm'
 
   const variantStyles = {
-    default: 'bg-white/80 border border-slate-300/35',
-    subtle: 'bg-accent/10 text-accent-strong',
-    accent: 'bg-gradient-to-r from-accent to-accent-strong text-white font-medium',
+    default: 'bg-white border border-slate-200 text-slate-600',
+    subtle: 'bg-blue-50 text-blue-600 font-medium',
+    accent: 'bg-blue-500 text-white font-medium',
   }
 
   return (

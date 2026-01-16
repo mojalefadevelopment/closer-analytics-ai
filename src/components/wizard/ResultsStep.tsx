@@ -18,7 +18,7 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
   }
 
   return (
-    <div className="grid gap-6 max-w-4xl mx-auto">
+    <div className="grid gap-8 max-w-4xl mx-auto py-6">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
@@ -57,7 +57,7 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
           <LiquidCard key={i} className={i === 0 ? 'bento-item-tall' : ''}>
             <div className="flex flex-col h-full">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-accent to-accent-strong flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
                   <span className="text-white font-bold text-xs">{i + 1}</span>
                 </div>
                 <span className="text-xs text-slate-500 uppercase tracking-wide">
@@ -78,10 +78,10 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
         {analysis.observations.slice(0, 3).map((obs, i) => (
           <LiquidCard key={`obs-${i}`} className={i === 0 ? 'bento-item-wide' : ''}>
             <div className="flex gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-accent" />
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-blue-500" />
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium uppercase tracking-wide text-accent-strong">
+                  <span className="text-xs font-medium uppercase tracking-wide text-blue-600">
                     Observatie
                   </span>
                 </div>
@@ -100,7 +100,7 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-center gap-3 pt-4">
+      <div className="flex justify-center gap-3 pt-6">
         <Button onClick={handleNewAnalysis}>
           ← Nieuwe analyse
         </Button>

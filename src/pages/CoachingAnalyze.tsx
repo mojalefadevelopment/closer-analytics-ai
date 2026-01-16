@@ -32,7 +32,7 @@ function WizardContent() {
   })
 
   async function handleAnalyze() {
-    const success = await analyze()
+    const success = await analyze(context)
     if (success) {
       nextStep()
     }
@@ -45,10 +45,7 @@ function WizardContent() {
   }
 
   return (
-    <div className="grid gap-8">
-      {/* Step Indicator */}
-      <StepIndicator />
-
+    <>
       {/* Step 0: Welcome */}
       <WizardStep step={0}>
         <WelcomeStep />
@@ -75,21 +72,26 @@ function WizardContent() {
       <WizardStep step={3}>
         {analysis && <ResultsStep analysis={analysis} onReset={handleReset} />}
       </WizardStep>
-    </div>
+    </>
+  )
+}
+
+function WizardWithShell() {
+  return (
+    <Wizard totalSteps={4}>
+      <WizardShellWrapper />
+    </Wizard>
+  )
+}
+
+function WizardShellWrapper() {
+  return (
+    <PageShell stepIndicator={<StepIndicator />}>
+      <WizardContent />
+    </PageShell>
   )
 }
 
 export default function CoachingAnalyze() {
-  return (
-    <PageShell>
-      {/* Background orbs */}
-      <div className="bg-orb orb-1" />
-      <div className="bg-orb orb-2" />
-      <div className="bg-orb orb-3" />
-
-      <Wizard totalSteps={4}>
-        <WizardContent />
-      </Wizard>
-    </PageShell>
-  )
+  return <WizardWithShell />
 }

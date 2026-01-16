@@ -2,13 +2,19 @@ import { useState } from 'react'
 import type { CoachingAnalysis } from '../types/coaching'
 import { MIN_TRANSCRIPT_CHARS } from '../lib/constants'
 
+export interface AnalysisContext {
+  experience: 'starter' | 'intermediate' | 'expert' | null
+  focus: 'bezwaren' | 'afsluiting' | 'rapport' | 'algemeen' | null
+  goal: 'closes' | 'tickets' | 'gesprekken' | null
+}
+
 export function useCoachingAnalysis() {
   const [transcript, setTranscript] = useState('')
   const [analysis, setAnalysis] = useState<CoachingAnalysis | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function analyze(): Promise<boolean> {
+  async function analyze(context?: AnalysisContext): Promise<boolean> {
     const trimmedTranscript = transcript.trim()
 
     if (trimmedTranscript.length < MIN_TRANSCRIPT_CHARS) {
@@ -23,7 +29,7 @@ export function useCoachingAnalysis() {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ transcript: trimmedTranscript }),
+        body: JSON.stringify({ transcript: trimmedTranscript, context }),
       })
 
       const data = await response.json()

@@ -47,10 +47,10 @@ export function TranscriptStep({
   const isValid = charCount >= MIN_TRANSCRIPT_CHARS
 
   return (
-    <div className="grid gap-6 max-w-3xl mx-auto">
+    <div className="grid gap-8 max-w-3xl mx-auto py-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+        <h2 className="text-2xl font-bold text-slate-800 mb-3">
           Plak je transcript
         </h2>
         <p className="text-slate-600">
@@ -59,7 +59,7 @@ export function TranscriptStep({
       </div>
 
       {/* Context pills */}
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="flex flex-wrap justify-center gap-3">
         {context.experience && (
           <Pill variant="accent">
             {contextLabels.experience[context.experience]}
@@ -79,19 +79,13 @@ export function TranscriptStep({
 
       {/* Transcript input */}
       <LiquidCard variant="large">
-        <div className="grid gap-4">
+        <div className="grid gap-5">
           {/* Character count */}
           <div className="flex justify-between items-center">
             <span className="text-sm text-slate-600">Transcript invoer</span>
-            <div
-              className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
-                isValid
-                  ? 'bg-green-100 text-green-700 border border-green-200'
-                  : 'bg-white/70 text-slate-500 border border-slate-200'
-              }`}
-            >
-              {charCount} / {MIN_TRANSCRIPT_CHARS}
-            </div>
+            <span className={`text-sm tabular-nums ${isValid ? 'text-blue-600' : 'text-slate-400'}`}>
+              {charCount.toLocaleString()}
+            </span>
           </div>
 
           {/* Textarea */}
@@ -115,7 +109,7 @@ Prospect: Goed, dankjewel. Ik heb de informatie gelezen...
       </LiquidCard>
 
       {/* Navigation */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pt-2">
         <Button variant="ghost" onClick={prevStep} disabled={loading}>
           ← Terug
         </Button>

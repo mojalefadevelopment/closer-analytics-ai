@@ -6,7 +6,7 @@ export function StepIndicator() {
   const { currentStep, totalSteps } = useWizard()
 
   return (
-    <div className="flex items-center justify-center gap-2 mb-6">
+    <div className="flex items-center justify-center gap-2">
       {Array.from({ length: totalSteps }).map((_, index) => {
         const isActive = index === currentStep
         const isCompleted = index < currentStep
@@ -17,8 +17,8 @@ export function StepIndicator() {
             <div className="flex flex-col items-center gap-1">
               <div
                 className={`
-                  relative w-10 h-10 rounded-full flex items-center justify-center
-                  transition-all duration-500 ease-out
+                  relative w-8 h-8 rounded-full flex items-center justify-center
+                  transition-all duration-200 ease-out
                   ${isActive ? 'step-dot-active' : ''}
                   ${isCompleted ? 'step-dot-completed' : ''}
                   ${!isActive && !isCompleted ? 'step-dot-pending' : ''}
@@ -41,8 +41,8 @@ export function StepIndicator() {
               {/* Label */}
               <span
                 className={`
-                  text-xs font-medium transition-colors duration-300
-                  ${isActive ? 'text-accent' : isCompleted ? 'text-accent-strong' : 'text-slate-400'}
+                  text-xs font-medium transition-colors duration-200
+                  ${isActive ? 'text-blue-600' : isCompleted ? 'text-blue-600' : 'text-slate-400'}
                 `}
               >
                 {stepLabels[index]}
@@ -53,8 +53,8 @@ export function StepIndicator() {
             {index < totalSteps - 1 && (
               <div
                 className={`
-                  w-8 h-0.5 rounded-full transition-all duration-500
-                  ${isCompleted ? 'bg-accent' : 'bg-slate-200'}
+                  w-8 h-0.5 rounded-full transition-all duration-200
+                  ${isCompleted ? 'bg-blue-500' : 'bg-slate-200'}
                 `}
               />
             )}

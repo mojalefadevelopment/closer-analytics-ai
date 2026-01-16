@@ -1,4 +1,9 @@
 import Groq from 'groq-sdk'
+import {
+  buildSystemPrompt,
+  buildUserPrompt,
+  type AnalysisContext,
+} from './config/prompts'
 
 export const config = {
   runtime: 'edge',
@@ -10,58 +15,9 @@ interface CoachingAnalysis {
   observations: Array<{ quote: string; insight: string }>
 }
 
-const systemPrompt = `Je bent een elite sales coach voor high-ticket closers (€3k-€50k deals).
-
-CONTEXT:
-- Je analyseert transcripten van 1-op-1 coaching calls tussen een coach en closer
-- De closer wil groeien van €3-6k/maand naar €10-15k/maand
-- Focus op concrete, direct toepasbare feedback
-
-JE COACHING FILOSOFIE:
-- Eén grote verandering is beter dan tien kleine
-- Acties moeten MORGEN toepasbaar zijn
-- Geen vage adviezen — specifiek en direct
-- Gebruik exacte quotes als bewijs
-- Wees eerlijk, ook als het oncomfortabel is
-
-REGELS:
-- Maximaal 3 actionPoints
-- Maximaal 3 observations
-- Elke actie moet MORGEN toepasbaar zijn
-- Geen coach-jargon of vage taal
-- Quotes moeten EXACT uit het transcript komen
-- Als iets niet duidelijk is, zeg dat eerlijk
-
-Antwoord ALLEEN met valid JSON in exact dit format, geen andere tekst.`
-
-function buildUserPrompt(transcript: string): string {
-  return `TRANSCRIPT:
-"""
-${transcript}
-"""
-
-ANALYSEER dit gesprek en geef feedback in EXACT dit JSON format:
-
-{
-  "priority": {
-    "title": "[Eén zin: de belangrijkste verandering]",
-    "explanation": "[2-3 zinnen waarom dit prioriteit #1 is]"
-  },
-  "actionPoints": [
-    {
-      "action": "[Concrete actie, begint met werkwoord]",
-      "why": "[Eén zin waarom dit werkt]"
-    }
-  ],
-  "observations": [
-    {
-      "quote": "[Exacte quote uit transcript]",
-      "insight": "[Wat dit onthult over de closer]"
-    }
-  ]
-}
-
-Geef ALLEEN valid JSON terug, geen andere tekst.`
+interface RequestBody {
+  transcript: string
+  context?: AnalysisContext
 }
 
 export default async function handler(req: Request) {
@@ -91,7 +47,8 @@ export default async function handler(req: Request) {
       )
     }
 
-    const { transcript } = await req.json()
+    const body: RequestBody = await req.json()
+    const { transcript, context } = body
 
     if (!transcript || typeof transcript !== 'string') {
       return new Response(
@@ -109,13 +66,23 @@ export default async function handler(req: Request) {
 
     const truncatedTranscript = transcript.slice(0, 32000)
 
+    // Build personalized prompts based on context
+    const analysisContext: AnalysisContext = {
+      experience: context?.experience || null,
+      focus: context?.focus || null,
+      goal: context?.goal || null,
+    }
+
+    const systemPrompt = buildSystemPrompt(analysisContext)
+    const userPrompt = buildUserPrompt(truncatedTranscript)
+
     const groq = new Groq({ apiKey })
 
     const completion = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: buildUserPrompt(truncatedTranscript) },
+        { role: 'user', content: userPrompt },
       ],
       max_tokens: 1024,
       temperature: 0.3,

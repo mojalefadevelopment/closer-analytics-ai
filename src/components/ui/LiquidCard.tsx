@@ -22,9 +22,9 @@ export function LiquidCard({
   `
 
   const variantStyles = {
-    default: 'p-5',
-    accent: 'p-5',
-    large: 'p-7',
+    default: 'p-6',
+    accent: 'p-6',
+    large: 'p-8',
   }
 
   return (

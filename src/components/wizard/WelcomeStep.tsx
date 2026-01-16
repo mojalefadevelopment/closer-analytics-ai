@@ -6,11 +6,11 @@ export function WelcomeStep() {
   const { nextStep } = useWizard()
 
   return (
-    <div className="grid gap-8 max-w-2xl mx-auto text-center">
+    <div className="grid gap-8 text-center max-w-xl mx-auto">
       {/* Main welcome card */}
       <LiquidCard variant="large" className="grid gap-6">
         {/* Icon */}
-        <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-accent to-accent-strong flex items-center justify-center liquid-blob">
+        <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg">
           <svg
             className="w-10 h-10 text-white"
             fill="none"
@@ -21,7 +21,7 @@ export function WelcomeStep() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={1.5}
-              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg>
         </div>
@@ -38,31 +38,33 @@ export function WelcomeStep() {
         </div>
 
         {/* Features */}
-        <div className="grid gap-3 text-left">
+        <div className="grid gap-3">
           {[
-            { icon: '🎯', text: 'Identificeer je #1 verbeterpunt' },
-            { icon: '💡', text: 'Krijg concrete actiepunten' },
-            { icon: '📊', text: 'Analyseer sterke & zwakke punten' },
+            'Identificeer je #1 verbeterpunt',
+            'Krijg concrete actiepunten',
+            'Analyseer sterke & zwakke punten',
           ].map((feature, i) => (
             <div
               key={i}
-              className="flex items-center gap-3 p-3 rounded-xl bg-white/50 border border-white/60"
+              className="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/50 border border-white/60"
             >
-              <span className="text-xl">{feature.icon}</span>
-              <span className="text-slate-700">{feature.text}</span>
+              <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+              <span className="text-slate-700">{feature}</span>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-        <Button onClick={nextStep} className="mx-auto">
-          Start Analyse →
-        </Button>
+        <div className="mt-4">
+          <Button onClick={nextStep} className="mx-auto">
+            Start Analyse →
+          </Button>
+        </div>
       </LiquidCard>
 
-      {/* Subtle hint */}
-      <p className="text-sm text-slate-400">
-        Gemiddelde analysetijd: ~10 seconden
+      {/* Social proof */}
+      <p className="text-sm text-slate-500">
+        Closers verbeteren gemiddeld 23% na hun eerste analyse
       </p>
     </div>
   )
