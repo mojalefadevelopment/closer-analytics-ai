@@ -7,12 +7,12 @@ interface PillProps {
 }
 
 export function Pill({ children, variant = 'default', className = '' }: PillProps) {
-  const baseStyles = 'px-3.5 py-1.5 rounded-full text-sm'
+  const baseStyles = 'px-3.5 py-1.5 rounded-full text-sm font-medium'
 
   const variantStyles = {
-    default: 'bg-white border border-slate-200 text-slate-600',
-    subtle: 'bg-blue-50 text-blue-600 font-medium',
-    accent: 'bg-blue-500 text-white font-medium',
+    default: 'bg-white/5 border border-white/10 text-text-secondary',
+    subtle: 'badge-glass text-primary',
+    accent: 'gradient-closer text-white',
   }
 
   return (

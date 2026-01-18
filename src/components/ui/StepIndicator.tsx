@@ -18,18 +18,18 @@ export function StepIndicator() {
               <div
                 className={`
                   relative w-8 h-8 rounded-full flex items-center justify-center
-                  transition-all duration-200 ease-out
+                  transition-all duration-300 ease-out
                   ${isActive ? 'step-dot-active' : ''}
                   ${isCompleted ? 'step-dot-completed' : ''}
                   ${!isActive && !isCompleted ? 'step-dot-pending' : ''}
                 `}
               >
                 {isCompleted ? (
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
-                  <span className={`text-sm font-semibold ${isActive ? 'text-white' : 'text-slate-400'}`}>
+                  <span className={`text-xs font-semibold ${isActive ? 'text-white' : 'text-text-muted'}`}>
                     {index + 1}
                   </span>
                 )}
@@ -42,7 +42,7 @@ export function StepIndicator() {
               <span
                 className={`
                   text-xs font-medium transition-colors duration-200
-                  ${isActive ? 'text-blue-600' : isCompleted ? 'text-blue-600' : 'text-slate-400'}
+                  ${isActive || isCompleted ? 'text-primary' : 'text-text-muted'}
                 `}
               >
                 {stepLabels[index]}
@@ -53,8 +53,8 @@ export function StepIndicator() {
             {index < totalSteps - 1 && (
               <div
                 className={`
-                  w-8 h-0.5 rounded-full transition-all duration-200
-                  ${isCompleted ? 'bg-blue-500' : 'bg-slate-200'}
+                  w-8 h-0.5 rounded-full transition-all duration-300
+                  ${isCompleted ? 'bg-primary' : 'bg-white/10'}
                 `}
               />
             )}

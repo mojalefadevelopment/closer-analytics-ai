@@ -19,29 +19,30 @@ export function Button({
   const baseStyles = `
     rounded-xl
     px-6 py-3
-    text-sm font-medium
+    text-sm font-semibold
     cursor-pointer
-    transition-all duration-150 ease-out
+    transition-all duration-200 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
   const variantStyles = {
     primary: `
-      bg-blue-500
+      gradient-closer
       text-white
       shadow-button
-      hover:not-disabled:bg-blue-600
       hover:not-disabled:shadow-button-hover
+      hover:not-disabled:-translate-y-0.5
       active:not-disabled:scale-[0.98]
       disabled:shadow-none
     `,
     ghost: `
-      bg-white
-      text-slate-700
-      border border-slate-200
-      hover:not-disabled:bg-slate-50
-      hover:not-disabled:border-slate-300
-      active:not-disabled:bg-slate-100
+      bg-white/5
+      text-text-secondary
+      border border-white/10
+      hover:not-disabled:bg-white/10
+      hover:not-disabled:text-text-primary
+      hover:not-disabled:border-white/20
+      active:not-disabled:bg-white/5
     `,
   }
 

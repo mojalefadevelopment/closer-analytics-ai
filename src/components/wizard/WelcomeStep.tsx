@@ -10,9 +10,9 @@ export function WelcomeStep() {
       {/* Main welcome card */}
       <LiquidCard variant="large" className="grid gap-6">
         {/* Icon */}
-        <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg">
+        <div className="mx-auto w-16 h-16 rounded-2xl icon-gradient-closer flex items-center justify-center">
           <svg
-            className="w-10 h-10 text-white"
+            className="w-8 h-8 text-white"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -28,10 +28,10 @@ export function WelcomeStep() {
 
         {/* Title */}
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-3">
+          <h1 className="text-3xl font-bold text-text-primary mb-3">
             AI Coaching Analyse
           </h1>
-          <p className="text-slate-600 text-lg leading-relaxed">
+          <p className="text-text-secondary text-lg leading-relaxed">
             Transformeer je sales gesprekken met AI-gedreven coaching.
             Ontvang directe feedback en concrete actiepunten.
           </p>
@@ -46,10 +46,10 @@ export function WelcomeStep() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/50 border border-white/60"
+              className="flex items-center justify-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10"
             >
-              <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
-              <span className="text-slate-700">{feature}</span>
+              <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+              <span className="text-text-secondary">{feature}</span>
             </div>
           ))}
         </div>
@@ -57,13 +57,13 @@ export function WelcomeStep() {
         {/* CTA */}
         <div className="mt-4">
           <Button onClick={nextStep} className="mx-auto">
-            Start Analyse →
+            Start Analyse
           </Button>
         </div>
       </LiquidCard>
 
       {/* Social proof */}
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-text-muted">
         Closers verbeteren gemiddeld 23% na hun eerste analyse
       </p>
     </div>

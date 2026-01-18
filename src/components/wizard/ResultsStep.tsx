@@ -22,10 +22,10 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">
+          <h2 className="text-2xl font-bold text-text-primary">
             Analyse Resultaat
           </h2>
-          <p className="text-slate-600">
+          <p className="text-text-secondary">
             Jouw persoonlijke coaching feedback
           </p>
         </div>
@@ -38,15 +38,15 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
         <LiquidCard variant="large" className="bento-item-large">
           <div className="flex flex-col h-full">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
                 <span className="text-white font-bold text-sm">#1</span>
               </div>
               <Pill variant="subtle">Prioriteit</Pill>
             </div>
-            <h3 className="text-xl font-bold text-slate-800 mb-3">
+            <h3 className="text-xl font-bold text-text-primary mb-3">
               {analysis.priority.title}
             </h3>
-            <p className="text-slate-600 leading-relaxed flex-1">
+            <p className="text-text-secondary leading-relaxed flex-1">
               {analysis.priority.explanation}
             </p>
           </div>
@@ -57,17 +57,17 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
           <LiquidCard key={i} className={i === 0 ? 'bento-item-tall' : ''}>
             <div className="flex flex-col h-full">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full icon-gradient-closer flex items-center justify-center">
                   <span className="text-white font-bold text-xs">{i + 1}</span>
                 </div>
-                <span className="text-xs text-slate-500 uppercase tracking-wide">
+                <span className="text-xs text-text-muted uppercase tracking-wide">
                   Actie
                 </span>
               </div>
-              <h4 className="font-semibold text-slate-800 mb-2">
+              <h4 className="font-semibold text-text-primary mb-2">
                 {action.action}
               </h4>
-              <p className="text-sm text-slate-600 flex-1">
+              <p className="text-sm text-text-secondary flex-1">
                 {action.why}
               </p>
             </div>
@@ -78,17 +78,17 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
         {analysis.observations.slice(0, 3).map((obs, i) => (
           <LiquidCard key={`obs-${i}`} className={i === 0 ? 'bento-item-wide' : ''}>
             <div className="flex gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-blue-500" />
+              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-primary" />
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium uppercase tracking-wide text-blue-600">
+                  <span className="text-xs font-medium uppercase tracking-wide text-primary">
                     Observatie
                   </span>
                 </div>
-                <p className="text-slate-700 mb-2">{obs.insight}</p>
+                <p className="text-text-secondary mb-2">{obs.insight}</p>
                 {obs.quote && (
                   <div className="quote-card">
-                    <p className="text-sm text-slate-600 italic">
+                    <p className="text-sm text-text-muted italic">
                       "{obs.quote}"
                     </p>
                   </div>
@@ -102,7 +102,7 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
       {/* Actions */}
       <div className="flex justify-center gap-3 pt-6">
         <Button onClick={handleNewAnalysis}>
-          ← Nieuwe analyse
+          Nieuwe analyse
         </Button>
       </div>
     </div>

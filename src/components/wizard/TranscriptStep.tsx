@@ -50,10 +50,10 @@ export function TranscriptStep({
     <div className="grid gap-8 max-w-3xl mx-auto py-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-slate-800 mb-3">
+        <h2 className="text-2xl font-bold text-text-primary mb-3">
           Plak je transcript
         </h2>
-        <p className="text-slate-600">
+        <p className="text-text-secondary">
           Kopieer en plak het transcript van je sales gesprek
         </p>
       </div>
@@ -82,8 +82,8 @@ export function TranscriptStep({
         <div className="grid gap-5">
           {/* Character count */}
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-600">Transcript invoer</span>
-            <span className={`text-sm tabular-nums ${isValid ? 'text-blue-600' : 'text-slate-400'}`}>
+            <span className="text-sm text-text-secondary">Transcript invoer</span>
+            <span className={`text-sm tabular-nums ${isValid ? 'text-primary' : 'text-text-muted'}`}>
               {charCount.toLocaleString()}
             </span>
           </div>
@@ -111,10 +111,10 @@ Prospect: Goed, dankjewel. Ik heb de informatie gelezen...
       {/* Navigation */}
       <div className="flex justify-between items-center pt-2">
         <Button variant="ghost" onClick={prevStep} disabled={loading}>
-          ← Terug
+          Terug
         </Button>
         <Button onClick={onAnalyze} disabled={!isValid} loading={loading}>
-          Analyseer →
+          Analyseer
         </Button>
       </div>
     </div>

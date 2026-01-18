@@ -10,14 +10,19 @@ export function Textarea({ className = '', ...props }: TextareaProps) {
       className={`
         w-full
         rounded-2xl
-        border border-slate-300/45
-        bg-white/90
+        border border-white/10
+        bg-white/5
         p-4
-        text-text
+        text-text-primary
         text-base
         leading-relaxed
         resize-y
         transition-all duration-200
+        placeholder:text-text-muted
+        focus:border-primary/50
+        focus:bg-white/8
+        disabled:opacity-50
+        disabled:cursor-not-allowed
         ${className}
       `}
       {...props}

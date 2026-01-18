@@ -42,10 +42,10 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
     <div className="grid gap-10 max-w-3xl mx-auto py-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-slate-800 mb-3">
+        <h2 className="text-2xl font-bold text-text-primary mb-3">
           Personaliseer je analyse
         </h2>
-        <p className="text-slate-600">
+        <p className="text-text-secondary">
           Selecteer je context voor een gerichtere analyse
         </p>
       </div>
@@ -63,8 +63,8 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.experience === option.id}
               className="text-center"
             >
-              <div className="font-semibold text-slate-800">{option.label}</div>
-              <div className="text-xs text-slate-500 mt-1">{option.description}</div>
+              <div className="font-semibold text-text-primary">{option.label}</div>
+              <div className="text-xs text-text-muted mt-1">{option.description}</div>
             </LiquidCard>
           ))}
         </div>
@@ -83,8 +83,8 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.focus === option.id}
               className="text-center"
             >
-              <div className="font-semibold text-slate-800 text-sm">{option.label}</div>
-              <div className="text-xs text-slate-500 mt-1">{option.description}</div>
+              <div className="font-semibold text-text-primary text-sm">{option.label}</div>
+              <div className="text-xs text-text-muted mt-1">{option.description}</div>
             </LiquidCard>
           ))}
         </div>
@@ -103,8 +103,8 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
               selected={context.goal === option.id}
               className="text-center"
             >
-              <div className="font-semibold text-slate-800">{option.label}</div>
-              <div className="text-xs text-slate-500 mt-1">{option.description}</div>
+              <div className="font-semibold text-text-primary">{option.label}</div>
+              <div className="text-xs text-text-muted mt-1">{option.description}</div>
             </LiquidCard>
           ))}
         </div>
@@ -113,10 +113,10 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
       {/* Navigation */}
       <div className="flex justify-between items-center pt-6">
         <Button variant="ghost" onClick={prevStep}>
-          ← Terug
+          Terug
         </Button>
         <Button onClick={nextStep} disabled={!isComplete}>
-          Volgende →
+          Volgende
         </Button>
       </div>
     </div>
