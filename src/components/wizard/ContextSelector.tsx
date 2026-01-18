@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useWizard } from '../ui/Wizard'
 import { LiquidCard } from '../ui/LiquidCard'
 import { Button } from '../ui/Button'
@@ -38,6 +39,27 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
 
   const isComplete = context.experience && context.focus && context.goal
 
+  const handleExperienceChange = useCallback(
+    (id: ContextOptions['experience']) => {
+      onContextChange({ ...context, experience: id })
+    },
+    [context, onContextChange]
+  )
+
+  const handleFocusChange = useCallback(
+    (id: ContextOptions['focus']) => {
+      onContextChange({ ...context, focus: id })
+    },
+    [context, onContextChange]
+  )
+
+  const handleGoalChange = useCallback(
+    (id: ContextOptions['goal']) => {
+      onContextChange({ ...context, goal: id })
+    },
+    [context, onContextChange]
+  )
+
   return (
     <div className="grid gap-10 max-w-3xl mx-auto py-6">
       {/* Header */}
@@ -59,7 +81,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
           {experienceOptions.map((option) => (
             <LiquidCard
               key={option.id}
-              onClick={() => onContextChange({ ...context, experience: option.id })}
+              onClick={() => handleExperienceChange(option.id)}
               selected={context.experience === option.id}
               className="text-center"
             >
@@ -79,7 +101,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
           {focusOptions.map((option) => (
             <LiquidCard
               key={option.id}
-              onClick={() => onContextChange({ ...context, focus: option.id })}
+              onClick={() => handleFocusChange(option.id)}
               selected={context.focus === option.id}
               className="text-center"
             >
@@ -99,7 +121,7 @@ export function ContextSelector({ context, onContextChange }: ContextSelectorPro
           {goalOptions.map((option) => (
             <LiquidCard
               key={option.id}
-              onClick={() => onContextChange({ ...context, goal: option.id })}
+              onClick={() => handleGoalChange(option.id)}
               selected={context.goal === option.id}
               className="text-center"
             >

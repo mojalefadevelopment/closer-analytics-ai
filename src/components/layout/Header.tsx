@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react'
+import { useState, useCallback, ReactNode } from 'react'
 import { ProfilePanel } from './ProfilePanel'
 
 interface HeaderProps {
@@ -7,6 +7,14 @@ interface HeaderProps {
 
 export function Header({ stepIndicator }: HeaderProps) {
   const [showProfile, setShowProfile] = useState(false)
+
+  const handleOpenProfile = useCallback(() => {
+    setShowProfile(true)
+  }, [])
+
+  const handleCloseProfile = useCallback(() => {
+    setShowProfile(false)
+  }, [])
 
   return (
     <>
@@ -41,7 +49,7 @@ export function Header({ stepIndicator }: HeaderProps) {
 
           {/* Profile button */}
           <button
-            onClick={() => setShowProfile(true)}
+            onClick={handleOpenProfile}
             className="flex items-center gap-2 px-3 py-2 rounded-full liquid-glass hover:bg-white/10 transition-all flex-shrink-0"
           >
             <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
@@ -65,7 +73,7 @@ export function Header({ stepIndicator }: HeaderProps) {
       </header>
 
       {/* Profile Panel */}
-      <ProfilePanel isOpen={showProfile} onClose={() => setShowProfile(false)} />
+      <ProfilePanel isOpen={showProfile} onClose={handleCloseProfile} />
     </>
   )
 }

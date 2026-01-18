@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useWizard } from '../ui/Wizard'
 import { LiquidCard } from '../ui/LiquidCard'
 import { Button } from '../ui/Button'
@@ -11,6 +12,17 @@ interface ResultsStepProps {
 
 export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
   const { goToStep } = useWizard()
+
+  // Memoize sliced arrays to prevent recreation on each render
+  const actionPoints = useMemo(
+    () => analysis.actionPoints.slice(0, 3),
+    [analysis.actionPoints]
+  )
+
+  const observations = useMemo(
+    () => analysis.observations.slice(0, 3),
+    [analysis.observations]
+  )
 
   function handleNewAnalysis() {
     onReset()
@@ -53,8 +65,11 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
         </LiquidCard>
 
         {/* Action Points */}
-        {analysis.actionPoints.slice(0, 3).map((action, i) => (
-          <LiquidCard key={i} className={i === 0 ? 'bento-item-tall' : ''}>
+        {actionPoints.map((action, i) => (
+          <LiquidCard
+            key={`action-${action.action.slice(0, 20)}`}
+            className={i === 0 ? 'bento-item-tall' : ''}
+          >
             <div className="flex flex-col h-full">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-6 h-6 rounded-full icon-gradient-closer flex items-center justify-center">
@@ -75,8 +90,11 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
         ))}
 
         {/* Observations */}
-        {analysis.observations.slice(0, 3).map((obs, i) => (
-          <LiquidCard key={`obs-${i}`} className={i === 0 ? 'bento-item-wide' : ''}>
+        {observations.map((obs, i) => (
+          <LiquidCard
+            key={`obs-${obs.insight.slice(0, 20)}`}
+            className={i === 0 ? 'bento-item-wide' : ''}
+          >
             <div className="flex gap-3">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-primary" />
               <div>

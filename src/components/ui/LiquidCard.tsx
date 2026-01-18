@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { memo, ReactNode, useMemo } from 'react'
 
 interface LiquidCardProps {
   children: ReactNode
@@ -8,36 +8,36 @@ interface LiquidCardProps {
   variant?: 'default' | 'accent' | 'large'
 }
 
-export function LiquidCard({
+const variantStyles = {
+  default: 'p-6',
+  accent: 'p-6',
+  large: 'p-8',
+}
+
+export const LiquidCard = memo(function LiquidCard({
   children,
   className = '',
   onClick,
   selected = false,
   variant = 'default',
 }: LiquidCardProps) {
-  const baseStyles = `
-    relative overflow-hidden rounded-3xl
-    transition-all duration-300 ease-out
-    ${onClick ? 'cursor-pointer' : ''}
-  `
-
-  const variantStyles = {
-    default: 'p-6',
-    accent: 'p-6',
-    large: 'p-8',
-  }
+  const cardClassName = useMemo(() => {
+    const baseStyles = `
+      relative overflow-hidden rounded-3xl
+      transition-all duration-300 ease-out
+      ${onClick ? 'cursor-pointer' : ''}
+    `
+    return `
+      liquid-card
+      ${baseStyles}
+      ${variantStyles[variant]}
+      ${selected ? 'liquid-card-selected' : ''}
+      ${className}
+    `.trim()
+  }, [onClick, variant, selected, className])
 
   return (
-    <div
-      className={`
-        liquid-card
-        ${baseStyles}
-        ${variantStyles[variant]}
-        ${selected ? 'liquid-card-selected' : ''}
-        ${className}
-      `}
-      onClick={onClick}
-    >
+    <div className={cardClassName} onClick={onClick}>
       {/* Animated border */}
       <div className="liquid-border-wrapper" />
 
@@ -48,4 +48,4 @@ export function LiquidCard({
       <div className="relative z-10">{children}</div>
     </div>
   )
-}
+})

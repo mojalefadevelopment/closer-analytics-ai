@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { PageShell } from '../components/layout/PageShell'
 import { Wizard, useWizard } from '../components/ui/Wizard'
 import { WizardStep } from '../components/ui/WizardStep'
@@ -11,6 +11,12 @@ import {
   type ContextOptions,
 } from '../components/wizard'
 import { useCoachingAnalysis } from '../hooks/useCoachingAnalysis'
+
+const INITIAL_CONTEXT: ContextOptions = {
+  experience: null,
+  focus: null,
+  goal: null,
+}
 
 function WizardContent() {
   const {
@@ -25,24 +31,31 @@ function WizardContent() {
 
   const { nextStep } = useWizard()
 
-  const [context, setContext] = useState<ContextOptions>({
-    experience: null,
-    focus: null,
-    goal: null,
-  })
+  const [context, setContext] = useState<ContextOptions>(INITIAL_CONTEXT)
 
-  async function handleAnalyze() {
+  const handleAnalyze = useCallback(async () => {
     const success = await analyze(context)
     if (success) {
       nextStep()
     }
-  }
+  }, [analyze, context, nextStep])
 
-  function handleReset() {
+  const handleReset = useCallback(() => {
     reset()
     setTranscript('')
-    setContext({ experience: null, focus: null, goal: null })
-  }
+    setContext(INITIAL_CONTEXT)
+  }, [reset, setTranscript])
+
+  const handleContextChange = useCallback((newContext: ContextOptions) => {
+    setContext(newContext)
+  }, [])
+
+  const handleTranscriptChange = useCallback((value: string) => {
+    setTranscript(value)
+  }, [setTranscript])
+
+  // Memoize step indicator to prevent re-renders
+  const stepIndicator = useMemo(() => <StepIndicator />, [])
 
   return (
     <>
@@ -53,14 +66,14 @@ function WizardContent() {
 
       {/* Step 1: Context Selection */}
       <WizardStep step={1}>
-        <ContextSelector context={context} onContextChange={setContext} />
+        <ContextSelector context={context} onContextChange={handleContextChange} />
       </WizardStep>
 
       {/* Step 2: Transcript Input */}
       <WizardStep step={2}>
         <TranscriptStep
           transcript={transcript}
-          onTranscriptChange={setTranscript}
+          onTranscriptChange={handleTranscriptChange}
           context={context}
           onAnalyze={handleAnalyze}
           loading={loading}
