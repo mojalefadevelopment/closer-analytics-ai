@@ -2,17 +2,18 @@ import { ReactNode } from 'react'
 
 interface PillProps {
   children: ReactNode
-  variant?: 'default' | 'subtle' | 'accent'
+  variant?: 'default' | 'primary' | 'success' | 'warning'
   className?: string
 }
 
 export function Pill({ children, variant = 'default', className = '' }: PillProps) {
-  const baseStyles = 'px-3.5 py-1.5 rounded-full text-sm font-medium'
+  const baseStyles = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium'
 
   const variantStyles = {
-    default: 'bg-white/5 border border-white/10 text-text-secondary',
-    subtle: 'badge-glass text-primary',
-    accent: 'gradient-closer text-white',
+    default: 'bg-gray-100 text-gray-600',
+    primary: 'bg-primary-light text-primary',
+    success: 'bg-success-light text-success',
+    warning: 'bg-warning-light text-warning',
   }
 
   return (

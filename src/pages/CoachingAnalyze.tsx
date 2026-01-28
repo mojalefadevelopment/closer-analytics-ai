@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 import { PageShell } from '../components/layout/PageShell'
 import { Wizard, useWizard } from '../components/ui/Wizard'
 import { WizardStep } from '../components/ui/WizardStep'
@@ -53,9 +53,6 @@ function WizardContent() {
   const handleTranscriptChange = useCallback((value: string) => {
     setTranscript(value)
   }, [setTranscript])
-
-  // Memoize step indicator to prevent re-renders
-  const stepIndicator = useMemo(() => <StepIndicator />, [])
 
   return (
     <>

@@ -1,8 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { useWizard } from '../ui/Wizard'
 import { LiquidCard } from '../ui/LiquidCard'
 import { Button } from '../ui/Button'
 import { Pill } from '../ui/Pill'
+import { useLanguage } from '../../lib/i18n'
+import { useMetrics } from '../../lib/metrics'
 import type { CoachingAnalysis } from '../../types/coaching'
 
 interface ResultsStepProps {
@@ -10,8 +12,17 @@ interface ResultsStepProps {
   onReset: () => void
 }
 
+const actionColors = [
+  { bg: 'bg-primary-light', text: 'text-primary', iconBg: 'bg-primary' },
+  { bg: 'bg-success-light', text: 'text-success', iconBg: 'bg-success' },
+  { bg: 'bg-warning-light', text: 'text-warning', iconBg: 'bg-warning' },
+]
+
 export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
   const { goToStep } = useWizard()
+  const { t } = useLanguage()
+  const { recordAnalysis } = useMetrics()
+  const hasRecorded = useRef(false)
 
   // Memoize sliced arrays to prevent recreation on each render
   const actionPoints = useMemo(
@@ -24,105 +35,158 @@ export function ResultsStep({ analysis, onReset }: ResultsStepProps) {
     [analysis.observations]
   )
 
+  // Calculate score based on action points (fewer = better performance)
+  const score = useMemo(() => {
+    const base = 65
+    const bonus = Math.max(0, 3 - analysis.actionPoints.length) * 10
+    return Math.min(95, base + bonus)
+  }, [analysis.actionPoints.length])
+
+  // Record analysis metrics once when component mounts
+  useEffect(() => {
+    if (!hasRecorded.current) {
+      recordAnalysis(score, analysis.actionPoints.length)
+      hasRecorded.current = true
+    }
+  }, [score, analysis.actionPoints.length, recordAnalysis])
+
   function handleNewAnalysis() {
     onReset()
     goToStep(0)
   }
 
   return (
-    <div className="grid gap-8 max-w-4xl mx-auto py-6">
-      {/* Header */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
+    <article className="grid gap-8 max-w-5xl mx-auto py-8 px-4">
+      {/* Header with Score */}
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-text-primary">
-            Analyse Resultaat
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            {t('results.title')}
           </h2>
-          <p className="text-text-secondary">
-            Jouw persoonlijke coaching feedback
+          <p className="text-gray-500">
+            {t('results.subtitle')}
           </p>
         </div>
-        <Pill variant="accent">AI Coaching</Pill>
-      </div>
 
-      {/* Bento Grid Layout */}
-      <div className="bento-grid stagger-children is-visible">
-        {/* Priority Card - Large */}
-        <LiquidCard variant="large" className="bento-item-large">
-          <div className="flex flex-col h-full">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                <span className="text-white font-bold text-sm">#1</span>
+        {/* Score Badge */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-2xl border border-gray-200">
+          <div className="w-12 h-12 rounded-xl bg-success-light flex items-center justify-center">
+            <span className="text-xl font-bold text-success">{score}</span>
+          </div>
+          <div>
+            <div className="text-sm font-medium text-gray-800">{t('results.score')}</div>
+            <div className="text-xs text-gray-400">Performance</div>
+          </div>
+        </div>
+      </header>
+
+      {/* Priority Card */}
+      <section aria-labelledby="priority-title">
+        <LiquidCard className="border-l-4 border-l-primary">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
               </div>
-              <Pill variant="subtle">Prioriteit</Pill>
+              <Pill variant="primary">{t('results.priority')}</Pill>
             </div>
-            <h3 className="text-xl font-bold text-text-primary mb-3">
+
+            <h3 id="priority-title" className="text-xl font-bold text-gray-800">
               {analysis.priority.title}
             </h3>
-            <p className="text-text-secondary leading-relaxed flex-1">
+
+            <p className="text-gray-500 leading-relaxed">
               {analysis.priority.explanation}
             </p>
           </div>
         </LiquidCard>
+      </section>
 
-        {/* Action Points */}
-        {actionPoints.map((action, i) => (
-          <LiquidCard
-            key={`action-${action.action.slice(0, 20)}`}
-            className={i === 0 ? 'bento-item-tall' : ''}
-          >
-            <div className="flex flex-col h-full">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full icon-gradient-closer flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">{i + 1}</span>
-                </div>
-                <span className="text-xs text-text-muted uppercase tracking-wide">
-                  Actie
-                </span>
-              </div>
-              <h4 className="font-semibold text-text-primary mb-2">
-                {action.action}
-              </h4>
-              <p className="text-sm text-text-secondary flex-1">
-                {action.why}
-              </p>
-            </div>
-          </LiquidCard>
-        ))}
-
-        {/* Observations */}
-        {observations.map((obs, i) => (
-          <LiquidCard
-            key={`obs-${obs.insight.slice(0, 20)}`}
-            className={i === 0 ? 'bento-item-wide' : ''}
-          >
-            <div className="flex gap-3">
-              <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-primary" />
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium uppercase tracking-wide text-primary">
-                    Observatie
-                  </span>
-                </div>
-                <p className="text-text-secondary mb-2">{obs.insight}</p>
-                {obs.quote && (
-                  <div className="quote-card">
-                    <p className="text-sm text-text-muted italic">
-                      "{obs.quote}"
-                    </p>
+      {/* Action Points */}
+      <section aria-label={t('results.actionPoints')}>
+        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
+          {t('results.actionPoints')}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {actionPoints.map((action, i) => {
+            const color = actionColors[i % actionColors.length]
+            return (
+              <LiquidCard
+                key={`action-${action.action.slice(0, 20)}`}
+                className="h-full"
+              >
+                <div className="flex flex-col h-full gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg ${color.iconBg} flex items-center justify-center`}>
+                      <span className="text-white font-semibold text-sm">{i + 1}</span>
+                    </div>
+                    <span className={`text-xs font-medium uppercase tracking-wide ${color.text}`}>
+                      {t('results.action')} {i + 1}
+                    </span>
                   </div>
-                )}
+
+                  <h4 className="font-semibold text-gray-800">
+                    {action.action}
+                  </h4>
+
+                  <p className="text-sm text-gray-500 leading-relaxed flex-1">
+                    {action.why}
+                  </p>
+                </div>
+              </LiquidCard>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Observations */}
+      <section aria-label={t('results.observations')}>
+        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
+          {t('results.observations')}
+        </h3>
+        <div className="grid gap-4">
+          {observations.map((obs, i) => (
+            <LiquidCard key={`obs-${obs.insight.slice(0, 20)}`}>
+              <div className="flex gap-4">
+                {/* Number indicator */}
+                <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm font-medium text-gray-600">{i + 1}</span>
+                </div>
+
+                <div className="flex-1 grid gap-3">
+                  <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                    {t('results.observation')} {i + 1}
+                  </span>
+
+                  <p className="text-gray-800 leading-relaxed">
+                    {obs.insight}
+                  </p>
+
+                  {obs.quote && (
+                    <blockquote className="pl-4 py-2 border-l-2 border-gray-200 bg-gray-50 rounded-r-lg">
+                      <p className="text-sm text-gray-500 italic">
+                        "{obs.quote}"
+                      </p>
+                    </blockquote>
+                  )}
+                </div>
               </div>
-            </div>
-          </LiquidCard>
-        ))}
-      </div>
+            </LiquidCard>
+          ))}
+        </div>
+      </section>
 
       {/* Actions */}
-      <div className="flex justify-center gap-3 pt-6">
-        <Button onClick={handleNewAnalysis}>
-          Nieuwe analyse
+      <nav className="flex justify-center gap-3 pt-6" aria-label="Analysis actions">
+        <Button variant="outline" onClick={handleNewAnalysis}>
+          {t('results.newAnalysis')}
         </Button>
-      </div>
-    </div>
+        <Button onClick={() => navigator.clipboard?.writeText(window.location.href)}>
+          {t('results.share')}
+        </Button>
+      </nav>
+    </article>
   )
 }

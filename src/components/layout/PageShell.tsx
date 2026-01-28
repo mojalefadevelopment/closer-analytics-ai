@@ -8,24 +8,21 @@ interface PageShellProps {
 
 export function PageShell({ children, stepIndicator }: PageShellProps) {
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <Header stepIndicator={stepIndicator} />
 
-      {/* Background orbs */}
-      <div className="bg-orb orb-1" />
-      <div className="bg-orb orb-2" />
-      <div className="bg-orb orb-3" />
-
       {/* Main container - centered in viewport below header */}
       <main
-        className="relative flex items-center justify-center px-6"
-        style={{ minHeight: 'calc(100vh - 7rem)', marginTop: '7rem' }}
+        id="main-content"
+        className="relative z-10 flex items-start justify-center px-4 sm:px-6 lg:px-8"
+        style={{ minHeight: 'calc(100vh - 7rem)', marginTop: '7rem', paddingBottom: '4rem' }}
+        role="main"
       >
-        <div className="w-full max-w-4xl">
+        <div className="w-full max-w-5xl py-8">
           {children}
         </div>
       </main>
-    </>
+    </div>
   )
 }

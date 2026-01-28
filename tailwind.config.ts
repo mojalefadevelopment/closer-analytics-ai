@@ -6,90 +6,76 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Core colors
+        // Core colors - matching Closer Analytics
         primary: {
           DEFAULT: '#3b82f6',
           hover: '#2563eb',
-        },
-        accent: {
-          DEFAULT: '#06b6d4',
-          hover: '#0891b2',
-        },
-        // Background surfaces
-        background: {
-          DEFAULT: '#0a0b0d',
-          elevated: 'rgba(32, 34, 42, 0.7)',
-        },
-        surface: {
-          DEFAULT: 'rgba(28, 30, 38, 0.45)',
-          glass: 'rgba(28, 30, 38, 0.45)',
-        },
-        // Text colors
-        text: {
-          DEFAULT: '#f8fafc',
-          primary: '#f8fafc',
-          secondary: '#94a3b8',
-          muted: '#64748b',
+          light: '#eff6ff',
         },
         // Semantic colors
-        positive: {
+        success: {
           DEFAULT: '#22c55e',
-          muted: 'rgba(34, 197, 94, 0.15)',
+          light: '#dcfce7',
+          border: '#bbf7d0',
         },
         warning: {
           DEFAULT: '#f59e0b',
-          muted: 'rgba(245, 158, 11, 0.15)',
+          light: '#fef3c7',
+        },
+        danger: {
+          DEFAULT: '#ef4444',
+          light: '#fee2e2',
+        },
+        // Neutrals - matching Closer Analytics
+        gray: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
         },
       },
       fontFamily: {
-        sans: ['Inter', '"SF Pro Display"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       borderRadius: {
+        'xl': '12px',
         '2xl': '16px',
-        '3xl': '24px',
-        '4xl': '32px',
+        '3xl': '20px',
+        '4xl': '24px',
       },
       boxShadow: {
-        // Glass shadows
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-        'glass-hover': '0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
-        'card': '0 4px 16px rgba(0, 0, 0, 0.08)',
-        'card-hover': '0 8px 32px rgba(0, 0, 0, 0.12)',
-        // Glow shadows
-        'glow-blue': '0 10px 25px -5px rgba(59, 130, 246, 0.3)',
-        'glow-cyan': '0 10px 25px -5px rgba(6, 182, 212, 0.3)',
-        'glow-green': '0 10px 25px -5px rgba(34, 197, 94, 0.3)',
+        // Clean card shadows - matching Closer Analytics
+        'card': '0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06)',
+        'card-hover': '0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06)',
+        'elevated': '0 4px 12px rgba(0, 0, 0, 0.08)',
+        'header': '0 1px 3px rgba(0, 0, 0, 0.05)',
         // Button shadows
-        'button': '0 4px 14px rgba(59, 130, 246, 0.25)',
-        'button-hover': '0 6px 20px rgba(59, 130, 246, 0.35)',
-      },
-      backdropBlur: {
-        'glass': '40px',
-        'nav': '50px',
-        'card': '30px',
+        'button': '0 1px 2px rgba(0, 0, 0, 0.05)',
+        'button-primary': '0 1px 3px rgba(59, 130, 246, 0.3)',
       },
       animation: {
-        'float': 'float 20s ease-in-out infinite',
-        'slide-up': 'slideUp 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
-        'fade-in': 'fadeIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
-        'scale-in': 'scaleIn 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+        'fade-in': 'fadeIn 0.2s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'slide-in-right': 'slideInRight 0.3s ease-out',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(15px)' },
-        },
-        slideUp: {
-          from: { opacity: '0', transform: 'translateY(10px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
         fadeIn: {
           from: { opacity: '0' },
           to: { opacity: '1' },
         },
-        scaleIn: {
-          from: { opacity: '0', transform: 'scale(0.95)' },
-          to: { opacity: '1', transform: 'scale(1)' },
+        slideUp: {
+          from: { opacity: '0', transform: 'translateY(8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideInRight: {
+          from: { opacity: '0', transform: 'translateX(16px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
         },
       },
     },
@@ -97,110 +83,141 @@ export default {
   plugins: [
     plugin(function ({ addUtilities }) {
       addUtilities({
-        // Hero Glass Panel (Level 1 - strongest)
-        '.hero-glass': {
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
-          'backdrop-filter': 'blur(40px) saturate(180%)',
-          '-webkit-backdrop-filter': 'blur(40px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          'box-shadow': '0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)',
+        // Clean card styles - matching Closer Analytics
+        '.card': {
+          'background': 'white',
+          'border': '1px solid #e2e8f0',
+          'border-radius': '20px',
+          'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06)',
         },
-        // Navigation Glass (Level 2)
-        '.nav-glass': {
-          background: 'rgba(20, 22, 28, 0.65)',
-          'backdrop-filter': 'blur(50px) saturate(180%)',
-          '-webkit-backdrop-filter': 'blur(50px) saturate(180%)',
-          'box-shadow': '0 4px 24px rgba(0,0,0,0.12)',
+        '.card-hover': {
+          'transition': 'box-shadow 0.2s ease, border-color 0.2s ease',
         },
-        // Interactive Glass (Level 3 - cards, tabs)
-        '.liquid-glass': {
-          background: 'rgba(28, 30, 38, 0.45)',
-          'backdrop-filter': 'blur(30px) saturate(150%)',
-          '-webkit-backdrop-filter': 'blur(30px) saturate(150%)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          'box-shadow': '0 4px 16px rgba(0,0,0,0.08)',
+        '.card-hover:hover': {
+          'box-shadow': '0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06)',
+          'border-color': '#cbd5e1',
         },
-        // Badge Glass (Level 4 - nested/pill)
-        '.badge-glass': {
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)',
-          'backdrop-filter': 'blur(30px) saturate(180%)',
-          '-webkit-backdrop-filter': 'blur(30px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.15)',
-          'box-shadow': '0 4px 16px rgba(0,0,0,0.08)',
+        // Icon containers - matching Closer Analytics style
+        '.icon-box': {
+          'display': 'flex',
+          'align-items': 'center',
+          'justify-content': 'center',
+          'border-radius': '12px',
         },
-        // Glass Card
-        '.glass-card': {
-          background: 'rgba(28, 30, 38, 0.45)',
-          'backdrop-filter': 'blur(30px) saturate(150%)',
-          '-webkit-backdrop-filter': 'blur(30px) saturate(150%)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          'box-shadow': '0 4px 16px rgba(0,0,0,0.08)',
+        '.icon-box-sm': {
+          'width': '32px',
+          'height': '32px',
         },
-        // Elevated Glass Card
-        '.glass-card-elevated': {
-          background: 'rgba(32, 34, 42, 0.7)',
-          'backdrop-filter': 'blur(40px) saturate(180%)',
-          '-webkit-backdrop-filter': 'blur(40px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          'box-shadow': '0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.1)',
+        '.icon-box-md': {
+          'width': '40px',
+          'height': '40px',
         },
-        // Frosted CTA
-        '.frosted-cta': {
-          background: 'rgba(28, 30, 38, 0.45)',
-          'backdrop-filter': 'blur(40px) saturate(180%)',
-          '-webkit-backdrop-filter': 'blur(40px) saturate(180%)',
-          'box-shadow': '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.1)',
+        '.icon-box-lg': {
+          'width': '48px',
+          'height': '48px',
         },
-        // Gradient buttons
-        '.gradient-closer': {
-          background: 'linear-gradient(to right, #3b82f6, #06b6d4)',
-          color: 'white',
-          'font-weight': '600',
+        // Icon background colors
+        '.icon-blue': {
+          'background': '#eff6ff',
+          'color': '#3b82f6',
         },
-        '.gradient-closer:hover': {
-          background: 'linear-gradient(to right, #2563eb, #0891b2)',
+        '.icon-green': {
+          'background': '#dcfce7',
+          'color': '#22c55e',
         },
-        // Icon backgrounds
-        '.icon-closer': {
-          background: 'rgba(59, 130, 246, 0.15)',
+        '.icon-amber': {
+          'background': '#fef3c7',
+          'color': '#f59e0b',
         },
-        '.icon-positive': {
-          background: 'rgba(34, 197, 94, 0.15)',
+        '.icon-purple': {
+          'background': '#f3e8ff',
+          'color': '#a855f7',
         },
-        '.icon-neutral': {
-          background: 'rgba(255, 255, 255, 0.08)',
+        '.icon-slate': {
+          'background': '#f1f5f9',
+          'color': '#64748b',
         },
-        // Gradient icon with glow
-        '.icon-gradient-closer': {
-          background: 'linear-gradient(to bottom right, #3b82f6, #06b6d4)',
-          'box-shadow': '0 10px 25px -5px rgba(59, 130, 246, 0.3)',
+        // Status badges - matching Closer Analytics
+        '.badge': {
+          'display': 'inline-flex',
+          'align-items': 'center',
+          'gap': '4px',
+          'padding': '4px 10px',
+          'border-radius': '9999px',
+          'font-size': '12px',
+          'font-weight': '500',
         },
-        '.icon-gradient-positive': {
-          background: 'linear-gradient(to bottom right, #22c55e, #10b981)',
-          'box-shadow': '0 10px 25px -5px rgba(34, 197, 94, 0.3)',
+        '.badge-success': {
+          'background': '#dcfce7',
+          'color': '#16a34a',
         },
-        // Status pill badges
-        '.pill-positive': {
-          background: 'rgba(34, 197, 94, 0.2)',
-          color: '#4ade80',
-          border: '1px solid rgba(34, 197, 94, 0.3)',
+        '.badge-warning': {
+          'background': '#fef3c7',
+          'color': '#d97706',
         },
-        '.pill-warning': {
-          background: 'rgba(245, 158, 11, 0.2)',
-          color: '#fbbf24',
-          border: '1px solid rgba(245, 158, 11, 0.3)',
+        '.badge-info': {
+          'background': '#eff6ff',
+          'color': '#3b82f6',
         },
-        '.pill-neutral': {
-          background: 'rgba(148, 163, 184, 0.2)',
-          color: '#94a3b8',
-          border: '1px solid rgba(148, 163, 184, 0.3)',
+        '.badge-neutral': {
+          'background': '#f1f5f9',
+          'color': '#64748b',
         },
-        // Text gradient
-        '.text-gradient-primary': {
-          background: 'linear-gradient(to right, #3b82f6, #06b6d4)',
-          '-webkit-background-clip': 'text',
-          '-webkit-text-fill-color': 'transparent',
-          'background-clip': 'text',
+        // Primary button gradient
+        '.btn-primary': {
+          'background': '#3b82f6',
+          'color': 'white',
+          'font-weight': '500',
+          'border-radius': '12px',
+          'padding': '10px 20px',
+          'transition': 'background 0.2s ease',
+        },
+        '.btn-primary:hover': {
+          'background': '#2563eb',
+        },
+        // Ghost button
+        '.btn-ghost': {
+          'background': 'transparent',
+          'color': '#64748b',
+          'font-weight': '500',
+          'border-radius': '12px',
+          'padding': '10px 20px',
+          'transition': 'background 0.2s ease, color 0.2s ease',
+        },
+        '.btn-ghost:hover': {
+          'background': '#f1f5f9',
+          'color': '#334155',
+        },
+        // Outlined button
+        '.btn-outline': {
+          'background': 'white',
+          'color': '#334155',
+          'font-weight': '500',
+          'border': '1px solid #e2e8f0',
+          'border-radius': '12px',
+          'padding': '10px 20px',
+          'transition': 'border-color 0.2s ease, background 0.2s ease',
+        },
+        '.btn-outline:hover': {
+          'border-color': '#cbd5e1',
+          'background': '#f8fafc',
+        },
+        // Stat card styles
+        '.stat-card': {
+          'background': 'white',
+          'border': '1px solid #e2e8f0',
+          'border-radius': '16px',
+          'padding': '20px',
+        },
+        '.stat-value': {
+          'font-size': '24px',
+          'font-weight': '700',
+          'color': '#1e293b',
+          'line-height': '1.2',
+        },
+        '.stat-label': {
+          'font-size': '13px',
+          'color': '#64748b',
         },
       })
     }),

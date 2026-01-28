@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import { useWizard } from '../ui/Wizard'
 import { LiquidCard } from '../ui/LiquidCard'
 import { Button } from '../ui/Button'
 import { Pill } from '../ui/Pill'
 import { Textarea } from '../ui/Textarea'
 import { MIN_TRANSCRIPT_CHARS } from '../../lib/constants'
+import { useLanguage } from '../../lib/i18n'
 import type { ContextOptions } from './ContextSelector'
 
 interface TranscriptStepProps {
@@ -15,25 +17,6 @@ interface TranscriptStepProps {
   error: string | null
 }
 
-const contextLabels = {
-  experience: {
-    starter: 'Starter',
-    intermediate: 'Intermediate',
-    expert: 'Expert',
-  },
-  focus: {
-    bezwaren: 'Bezwaren',
-    afsluiting: 'Afsluiting',
-    rapport: 'Rapport',
-    algemeen: 'Algemeen',
-  },
-  goal: {
-    closes: 'Meer closes',
-    tickets: 'Hogere tickets',
-    gesprekken: 'Betere gesprekken',
-  },
-}
-
 export function TranscriptStep({
   transcript,
   onTranscriptChange,
@@ -43,80 +26,126 @@ export function TranscriptStep({
   error,
 }: TranscriptStepProps) {
   const { prevStep } = useWizard()
+  const { t } = useLanguage()
   const charCount = transcript.trim().length
   const isValid = charCount >= MIN_TRANSCRIPT_CHARS
 
+  // Memoize context labels to avoid recreation on every render
+  const contextLabels = useMemo(() => ({
+    experience: {
+      starter: t('context.experience.starter'),
+      intermediate: t('context.experience.intermediate'),
+      expert: t('context.experience.expert'),
+    },
+    focus: {
+      bezwaren: t('context.focus.bezwaren'),
+      afsluiting: t('context.focus.afsluiting'),
+      rapport: t('context.focus.rapport'),
+      algemeen: t('context.focus.algemeen'),
+    },
+    goal: {
+      closes: t('context.goal.closes'),
+      tickets: t('context.goal.tickets'),
+      gesprekken: t('context.goal.gesprekken'),
+    },
+  }), [t])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (isValid && !loading) {
+      onAnalyze()
+    }
+  }
+
   return (
-    <div className="grid gap-8 max-w-3xl mx-auto py-6">
+    <article className="grid gap-8 max-w-4xl mx-auto py-8">
       {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-text-primary mb-3">
-          Plak je transcript
+      <header className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          {t('transcript.title')}
         </h2>
-        <p className="text-text-secondary">
-          Kopieer en plak het transcript van je sales gesprek
+        <p className="text-gray-500">
+          {t('transcript.subtitle')}
         </p>
-      </div>
+      </header>
 
       {/* Context pills */}
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="flex flex-wrap justify-center gap-2" role="list" aria-label="Selected context">
         {context.experience && (
-          <Pill variant="accent">
+          <Pill variant="primary">
             {contextLabels.experience[context.experience]}
           </Pill>
         )}
         {context.focus && (
-          <Pill variant="accent">
+          <Pill variant="primary">
             {contextLabels.focus[context.focus]}
           </Pill>
         )}
         {context.goal && (
-          <Pill variant="accent">
+          <Pill variant="primary">
             {contextLabels.goal[context.goal]}
           </Pill>
         )}
       </div>
 
       {/* Transcript input */}
-      <LiquidCard variant="large">
-        <div className="grid gap-5">
-          {/* Character count */}
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-text-secondary">Transcript invoer</span>
-            <span className={`text-sm tabular-nums ${isValid ? 'text-primary' : 'text-text-muted'}`}>
-              {charCount.toLocaleString()}
-            </span>
+      <form onSubmit={handleSubmit}>
+        <LiquidCard variant="large">
+          <div className="grid gap-4">
+            {/* Character count */}
+            <div className="flex justify-between items-center">
+              <label htmlFor="transcript-input" className="text-sm text-gray-500">
+                {t('transcript.label')}
+              </label>
+              <span
+                className={`text-sm tabular-nums ${isValid ? 'text-success' : 'text-gray-400'}`}
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {charCount.toLocaleString()} / {MIN_TRANSCRIPT_CHARS.toLocaleString()} {t('transcript.min')}
+              </span>
+            </div>
+
+            {/* Textarea */}
+            <Textarea
+              id="transcript-input"
+              name="transcript"
+              value={transcript}
+              onChange={(e) => onTranscriptChange(e.target.value)}
+              placeholder={t('transcript.placeholder')}
+              rows={12}
+              disabled={loading}
+              className="min-h-[280px]"
+              aria-describedby={error ? 'transcript-error' : undefined}
+              aria-invalid={error ? 'true' : undefined}
+              required
+              spellCheck="false"
+            />
+
+            {/* Error */}
+            {error && (
+              <div
+                id="transcript-error"
+                className="error-box"
+                role="alert"
+                aria-live="assertive"
+              >
+                {error}
+              </div>
+            )}
           </div>
+        </LiquidCard>
 
-          {/* Textarea */}
-          <Textarea
-            value={transcript}
-            onChange={(e) => onTranscriptChange(e.target.value)}
-            placeholder="Plak hier je coaching call transcript...
-
-Voorbeeld:
-Closer: Goedemiddag, hoe gaat het vandaag?
-Prospect: Goed, dankjewel. Ik heb de informatie gelezen...
-..."
-            rows={12}
-            disabled={loading}
-            className="min-h-[300px]"
-          />
-
-          {/* Error */}
-          {error && <div className="error-box">{error}</div>}
+        {/* Navigation */}
+        <div className="flex justify-between items-center pt-6">
+          <Button type="button" variant="ghost" onClick={prevStep} disabled={loading}>
+            {t('nav.back')}
+          </Button>
+          <Button type="submit" disabled={!isValid} loading={loading}>
+            {t('transcript.analyze')}
+          </Button>
         </div>
-      </LiquidCard>
-
-      {/* Navigation */}
-      <div className="flex justify-between items-center pt-2">
-        <Button variant="ghost" onClick={prevStep} disabled={loading}>
-          Terug
-        </Button>
-        <Button onClick={onAnalyze} disabled={!isValid} loading={loading}>
-          Analyseer
-        </Button>
-      </div>
-    </div>
+      </form>
+    </article>
   )
 }

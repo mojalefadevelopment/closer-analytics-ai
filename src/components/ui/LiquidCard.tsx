@@ -1,17 +1,11 @@
-import { memo, ReactNode, useMemo } from 'react'
+import { memo, ReactNode, useMemo, useCallback } from 'react'
 
 interface LiquidCardProps {
   children: ReactNode
   className?: string
   onClick?: () => void
   selected?: boolean
-  variant?: 'default' | 'accent' | 'large'
-}
-
-const variantStyles = {
-  default: 'p-6',
-  accent: 'p-6',
-  large: 'p-8',
+  variant?: 'default' | 'large'
 }
 
 export const LiquidCard = memo(function LiquidCard({
@@ -21,31 +15,41 @@ export const LiquidCard = memo(function LiquidCard({
   selected = false,
   variant = 'default',
 }: LiquidCardProps) {
+  const paddingStyles = {
+    default: 'p-5',
+    large: 'p-6 sm:p-8',
+  }
+
   const cardClassName = useMemo(() => {
     const baseStyles = `
-      relative overflow-hidden rounded-3xl
-      transition-all duration-300 ease-out
+      bg-white rounded-2xl border
+      transition-all duration-200
       ${onClick ? 'cursor-pointer' : ''}
     `
-    return `
-      liquid-card
-      ${baseStyles}
-      ${variantStyles[variant]}
-      ${selected ? 'liquid-card-selected' : ''}
-      ${className}
-    `.trim()
+    const borderStyle = selected
+      ? 'border-primary shadow-[0_0_0_1px_#3b82f6]'
+      : 'border-gray-200 hover:border-gray-300 hover:shadow-card-hover'
+
+    return `${baseStyles} ${borderStyle} ${paddingStyles[variant]} ${className}`.trim()
   }, [onClick, variant, selected, className])
 
+  // Memoize keyboard handler to prevent recreation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault()
+      onClick()
+    }
+  }, [onClick])
+
   return (
-    <div className={cardClassName} onClick={onClick}>
-      {/* Animated border */}
-      <div className="liquid-border-wrapper" />
-
-      {/* Glass background */}
-      <div className="liquid-glass-bg" />
-
-      {/* Content */}
-      <div className="relative z-10">{children}</div>
+    <div
+      className={cardClassName}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? handleKeyDown : undefined}
+    >
+      {children}
     </div>
   )
 })

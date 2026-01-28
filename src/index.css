@@ -5,23 +5,26 @@
 @tailwind utilities;
 
 /* ===================================
-   BASE STYLES - iOS 26 LIQUID GLASS
+   BASE STYLES - CLOSER ANALYTICS
    =================================== */
 
 :root {
-  /* Safe areas */
   --sat: env(safe-area-inset-top);
   --sab: env(safe-area-inset-bottom);
   --sal: env(safe-area-inset-left);
   --sar: env(safe-area-inset-right);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #f8fafc;
-  background: #0a0b0d;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1e293b;
+  background: #f8fafc;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,6 +33,20 @@ body {
 #root {
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* ===================================
@@ -37,12 +54,18 @@ body {
    =================================== */
 
 h1, h2, h3, h4, h5, h6 {
-  color: #f8fafc;
+  color: #1e293b;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h1 {
   font-weight: 700;
 }
 
 p {
-  color: #94a3b8;
+  color: #64748b;
+  line-height: 1.6;
 }
 
 /* ===================================
@@ -50,8 +73,8 @@ p {
    =================================== */
 
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: #f8fafc;
+  background: rgba(59, 130, 246, 0.2);
+  color: #1e293b;
 }
 
 /* ===================================
@@ -64,16 +87,16 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: #94a3b8;
 }
 
 /* ===================================
@@ -81,16 +104,17 @@ p {
    =================================== */
 
 *:focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
 /* ===================================
-   BUTTONS - remove default styles
+   BUTTONS
    =================================== */
 
 button {
   font-family: inherit;
+  cursor: pointer;
 }
 
 /* ===================================
@@ -99,12 +123,20 @@ button {
 
 input, textarea {
   font-family: inherit;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  border-radius: 12px;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #64748b;
+  color: #94a3b8;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
