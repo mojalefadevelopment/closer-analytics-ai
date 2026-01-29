@@ -26,29 +26,43 @@ export function useCoachingAnalysis() {
     setError(null)
 
     try {
+      console.log('[API] Sending analysis request...', { transcriptLength: trimmedTranscript.length, context })
+
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ transcript: trimmedTranscript, context }),
       })
 
+      console.log('[API] Response status:', response.status, response.statusText)
+
       const text = await response.text()
+      console.log('[API] Response text length:', text.length)
+
       if (!text) {
         throw new Error('Empty response from API')
       }
 
-      const data = JSON.parse(text)
+      let data
+      try {
+        data = JSON.parse(text)
+      } catch (parseError) {
+        console.error('[API] JSON parse error. Raw response:', text.slice(0, 500))
+        throw new Error('Invalid JSON response from API')
+      }
 
       if (!response.ok) {
+        console.error('[API] Error response:', data)
         throw new Error(data.error || 'Analyse mislukt')
       }
 
+      console.log('[API] Analysis complete:', data)
       setAnalysis(data)
       return true
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Analyse mislukt. Probeer opnieuw.'
       setError(message)
-      console.error('Analysis error:', err)
+      console.error('[API] Analysis error:', err)
       return false
     } finally {
       setLoading(false)

@@ -74,7 +74,7 @@ interface RequestBody {
 
 function logSection(title: string, content: unknown) {
   console.log('\n' + '='.repeat(60))
-  console.log(`📋 ${title}`)
+  console.log(`[LOG] ${title}`)
   console.log('='.repeat(60))
   if (typeof content === 'string') {
     // Truncate long strings for readability
@@ -116,7 +116,7 @@ export default async function handler(req: Request) {
   try {
     const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
-      console.error('❌ GROQ_API_KEY not configured')
+      console.error('[ERROR] GROQ_API_KEY not configured')
       return new Response(
         JSON.stringify({ error: 'API configuratie fout. Check GROQ_API_KEY.' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -167,7 +167,7 @@ export default async function handler(req: Request) {
 
     const groq = new Groq({ apiKey })
 
-    console.log('\n⏳ Sending request to Groq API...')
+    console.log('\n[API] Sending request to Groq API...')
     const startTime = Date.now()
 
     const completion = await groq.chat.completions.create({
@@ -182,7 +182,7 @@ export default async function handler(req: Request) {
     })
 
     const duration = Date.now() - startTime
-    console.log(`✅ Groq API responded in ${duration}ms`)
+    console.log(`[API] Groq API responded in ${duration}ms`)
 
     // Log raw API response
     logSection('RAW GROQ RESPONSE', {
@@ -205,7 +205,7 @@ export default async function handler(req: Request) {
     logSection('PARSED ANALYSIS OBJECT', analysis)
 
     // Log summary stats
-    console.log('\n📊 ANALYSIS SUMMARY:')
+    console.log('\n[SUMMARY] ANALYSIS SUMMARY:')
     console.log(`   - Scores: ${analysis.scores?.map(s => `${s.category}=${s.score}`).join(', ')}`)
     console.log(`   - Strengths: ${analysis.strengths?.length || 0}`)
     console.log(`   - Critical Moments: ${analysis.criticalMoments?.length || 0}`)
@@ -222,7 +222,7 @@ export default async function handler(req: Request) {
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    console.error('\n❌ API ERROR:', errorMessage)
+    console.error('\n[ERROR] API ERROR:', errorMessage)
     if (error instanceof Error && error.stack) {
       console.error('Stack trace:', error.stack)
     }
