@@ -15,11 +15,10 @@ export function PageShell({ children, stepIndicator }: PageShellProps) {
       {/* Main container - centered in viewport below header */}
       <main
         id="main-content"
-        className="relative z-10 flex items-start justify-center px-4 sm:px-6 lg:px-8"
-        style={{ minHeight: 'calc(100vh - 7rem)', marginTop: '7rem', paddingBottom: '4rem' }}
+        className="relative z-10 flex items-start justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-16 min-h-screen"
         role="main"
       >
-        <div className="w-full max-w-5xl py-8">
+        <div className="w-full max-w-5xl">
           {children}
         </div>
       </main>

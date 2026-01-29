@@ -1,6 +1,6 @@
-import { memo, ReactNode, useMemo, useCallback } from 'react'
+import { memo, ReactNode, useMemo, useCallback, HTMLAttributes } from 'react'
 
-interface LiquidCardProps {
+interface LiquidCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> {
   children: ReactNode
   className?: string
   onClick?: () => void
@@ -14,6 +14,7 @@ export const LiquidCard = memo(function LiquidCard({
   onClick,
   selected = false,
   variant = 'default',
+  ...rest
 }: LiquidCardProps) {
   const paddingStyles = {
     default: 'p-5',
@@ -43,11 +44,12 @@ export const LiquidCard = memo(function LiquidCard({
 
   return (
     <div
+      {...rest}
       className={cardClassName}
       onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? handleKeyDown : undefined}
+      role={onClick ? 'button' : rest.role}
+      tabIndex={onClick ? 0 : rest.tabIndex}
+      onKeyDown={onClick ? handleKeyDown : rest.onKeyDown}
     >
       {children}
     </div>

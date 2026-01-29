@@ -1,14 +1,11 @@
 import CoachingAnalyze from './pages/CoachingAnalyze'
-import { LanguageProvider } from './lib/i18n'
-import { MetricsProvider } from './lib/metrics'
+import { AppProviders } from './app/providers'
 
 function App() {
   return (
-    <LanguageProvider>
-      <MetricsProvider>
-        <CoachingAnalyze />
-      </MetricsProvider>
-    </LanguageProvider>
+    <AppProviders>
+      <CoachingAnalyze />
+    </AppProviders>
   )
 }
 

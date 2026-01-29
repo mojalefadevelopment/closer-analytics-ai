@@ -9,7 +9,7 @@ import {
   TranscriptStep,
   ResultsStep,
   type ContextOptions,
-} from '../components/wizard'
+} from '../components/analysis'
 import { useCoachingAnalysis } from '../hooks/useCoachingAnalysis'
 
 const INITIAL_CONTEXT: ContextOptions = {

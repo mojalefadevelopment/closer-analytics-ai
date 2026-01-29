@@ -32,7 +32,12 @@ export function useCoachingAnalysis() {
         body: JSON.stringify({ transcript: trimmedTranscript, context }),
       })
 
-      const data = await response.json()
+      const text = await response.text()
+      if (!text) {
+        throw new Error('Empty response from API')
+      }
+
+      const data = JSON.parse(text)
 
       if (!response.ok) {
         throw new Error(data.error || 'Analyse mislukt')

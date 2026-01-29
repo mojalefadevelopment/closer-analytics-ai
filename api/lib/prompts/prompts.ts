@@ -1625,22 +1625,75 @@ export function getActiveFrameworks(focus: string | null): Framework[] {
 // ===========================================
 
 export const JSON_FORMAT = `{
+  "summary": {
+    "oneLiner": "[Eén pakkende zin die het gesprek samenvat, max 15 woorden]",
+    "callType": "[discovery | follow-up | closing | objection-heavy | other]",
+    "overallImpression": "[2-3 zinnen: wat ging goed, wat kan beter, hoe was de energie]"
+  },
+  "scores": [
+    {
+      "category": "rapport",
+      "score": [1-10],
+      "label": "Rapport",
+      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+    },
+    {
+      "category": "discovery",
+      "score": [1-10],
+      "label": "Discovery",
+      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+    },
+    {
+      "category": "objections",
+      "score": [1-10],
+      "label": "Bezwaren",
+      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+    },
+    {
+      "category": "closing",
+      "score": [1-10],
+      "label": "Closing",
+      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+    }
+  ],
+  "strengths": [
+    {
+      "title": "[Wat de closer goed deed - kort en krachtig]",
+      "example": "[Exacte quote of moment uit transcript dat dit aantoont]"
+    }
+  ],
+  "criticalMoments": [
+    {
+      "moment": "[Beschrijving van wat er gebeurde]",
+      "quote": "[Exacte quote uit transcript]",
+      "impact": "[positive | negative | neutral]",
+      "suggestion": "[Alleen bij negative: wat had beter gekund met voorbeeldzin]"
+    }
+  ],
   "priority": {
-    "title": "[Eén zin: de belangrijkste verandering]",
-    "explanation": "[2-3 zinnen waarom dit prioriteit #1 is]"
+    "title": "[Eén zin: de belangrijkste verandering, max 12 woorden]",
+    "explanation": "[2-3 zinnen waarom dit prioriteit #1 is]",
+    "immediateAction": "[Exacte zin of vraag die ze in hun VOLGENDE gesprek kunnen gebruiken]"
   },
   "actionPoints": [
     {
-      "action": "[Concrete actie, begint met werkwoord]",
-      "why": "[Eén zin waarom dit werkt]"
+      "action": "[Concrete actie, begint met werkwoord, max 10 woorden]",
+      "why": "[Eén zin waarom dit werkt]",
+      "example": "[Voorbeeldzin die ze letterlijk kunnen gebruiken]"
     }
   ],
   "observations": [
     {
-      "quote": "[Exacte quote uit transcript]",
-      "insight": "[Wat dit onthult over de closer]"
+      "quote": "[Exacte quote uit transcript - MOET letterlijk in transcript staan]",
+      "insight": "[Wat dit onthult over de closer, max 15 woorden]",
+      "category": "[rapport | discovery | objections | closing | general]"
     }
-  ]
+  ],
+  "_meta": {
+    "reasoning": "[1-2 zinnen: leg kort uit hoe je tot deze analyse kwam]",
+    "confidence": "[high | medium | low - gebaseerd op transcript kwaliteit en duidelijkheid]",
+    "transcriptQuality": "[excellent | good | fair | poor - is het transcript compleet en leesbaar?]"
+  }
 }`
 
 // ===========================================
@@ -1714,9 +1767,48 @@ export function buildUserPrompt(transcript: string): string {
 ${transcript}
 """
 
-ANALYSEER dit gesprek en geef feedback in EXACT dit JSON format:
+═══════════════════════════════════════════
+ANALYSE INSTRUCTIES - VOLG DEZE STAPPEN:
+═══════════════════════════════════════════
+
+STAP 1: LEES het transcript volledig door
+- Identificeer wie de closer is en wie de prospect
+- Let op de flow van het gesprek
+
+STAP 2: IDENTIFICEER KRITIEKE MOMENTEN
+- Waar ging het goed? (koopsignalen, goede vragen, sterke momenten)
+- Waar ging het mis? (gemiste kansen, slechte reacties, verloren momentum)
+- Zoek EXACTE QUOTES die dit aantonen
+
+STAP 3: BEOORDEEL ELKE CATEGORIE (1-10)
+- Rapport: Hoe goed was de connectie en het vertrouwen?
+- Discovery: Hoe diep ging de vraagstelling? Werd de pijn blootgelegd?
+- Bezwaren: Hoe werden bezwaren opgepakt? (of waren er geen?)
+- Closing: Werd er om de sale gevraagd? Hoe?
+
+STAP 4: BEPAAL DE #1 PRIORITEIT
+- Welke ENE verandering zou het MEESTE impact hebben?
+- Geef een CONCRETE actie die ze MORGEN kunnen doen
+
+STAP 5: FORMULEER ACTIONABLE FEEDBACK
+- Elke actie moet beginnen met een WERKWOORD
+- Geef VOORBEELDZINNEN die ze letterlijk kunnen gebruiken
+- Quotes moeten EXACT uit het transcript komen
+
+═══════════════════════════════════════════
+OUTPUT FORMAT - STRICT JSON
+═══════════════════════════════════════════
 
 ${JSON_FORMAT}
 
-Geef ALLEEN valid JSON terug, geen andere tekst.`
+═══════════════════════════════════════════
+BELANGRIJKE REGELS:
+═══════════════════════════════════════════
+1. Quotes MOETEN letterlijk uit het transcript komen - verzin NIETS
+2. Als er geen bezwaren waren, geef score 5 en zeg "Geen bezwaren in dit gesprek"
+3. Strengths zijn VERPLICHT - vind minstens 1 ding dat goed ging
+4. Antwoord ALLEEN met valid JSON, geen andere tekst
+5. Alle feedback in het NEDERLANDS
+
+Geef ALLEEN valid JSON terug.`
 }

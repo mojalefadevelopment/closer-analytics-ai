@@ -113,3 +113,157 @@
 .animate-fade-in {
   animation: fadeIn 0.2s ease-out forwards;
 }
+
+/* ===================================
+   INTERACTIVE RESULTS ANIMATIONS
+   =================================== */
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.1);
+  }
+}
+
+@keyframes countUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-reveal-up {
+  animation: revealUp 0.5s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-count-up {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* Initially hidden for animations */
+.opacity-0 { opacity: 0; }
+
+/* Expandable card styles */
+.expandable-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expandable-card:hover {
+  transform: translateY(-2px);
+}
+
+.expandable-card[data-expanded="true"] {
+  background: linear-gradient(to bottom, white, #f8fafc);
+}
+
+.expand-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.expand-content[data-visible="true"] {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* Progress journey indicator */
+.journey-progress {
+  position: relative;
+}
+
+.journey-progress::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+.journey-step {
+  position: relative;
+  padding-left: 48px;
+}
+
+.journey-step::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.journey-step[data-active="true"]::before {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.journey-step[data-completed="true"]::before {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+/* Chevron rotation */
+.chevron-icon {
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon[data-expanded="true"] {
+  transform: rotate(180deg);
+}

@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { useWizard } from '../ui/Wizard'
-import { LiquidCard } from '../ui/LiquidCard'
-import { Button } from '../ui/Button'
-import { useLanguage } from '../../lib/i18n'
+import { useWizard } from '../../ui/Wizard'
+import { LiquidCard } from '../../ui/LiquidCard'
+import { Button } from '../../ui/Button'
+import { useLanguage } from '../../../lib/i18n'
 
 const featureStyles = [
   {

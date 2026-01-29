@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
-import { useWizard } from '../ui/Wizard'
-import { LiquidCard } from '../ui/LiquidCard'
-import { Button } from '../ui/Button'
-import { Pill } from '../ui/Pill'
-import { Textarea } from '../ui/Textarea'
-import { MIN_TRANSCRIPT_CHARS } from '../../lib/constants'
-import { useLanguage } from '../../lib/i18n'
+import { useWizard } from '../../ui/Wizard'
+import { LiquidCard } from '../../ui/LiquidCard'
+import { Button } from '../../ui/Button'
+import { Pill } from '../../ui/Pill'
+import { Textarea } from '../../ui/Textarea'
+import { MIN_TRANSCRIPT_CHARS } from '../../../lib/constants'
+import { useLanguage } from '../../../lib/i18n'
 import type { ContextOptions } from './ContextSelector'
 
 interface TranscriptStepProps {
@@ -98,11 +98,22 @@ export function TranscriptStep({
                 {t('transcript.label')}
               </label>
               <span
-                className={`text-sm tabular-nums ${isValid ? 'text-success' : 'text-gray-400'}`}
+                className={`text-sm tabular-nums flex items-center gap-1.5 ${isValid ? 'text-success' : 'text-gray-400'}`}
                 aria-live="polite"
                 aria-atomic="true"
               >
-                {charCount.toLocaleString()} / {MIN_TRANSCRIPT_CHARS.toLocaleString()} {t('transcript.min')}
+                {isValid ? (
+                  <>
+                    {charCount.toLocaleString()} {t('transcript.chars')}
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    {charCount.toLocaleString()} / {MIN_TRANSCRIPT_CHARS.toLocaleString()} {t('transcript.chars')}
+                  </>
+                )}
               </span>
             </div>
 

@@ -28,67 +28,96 @@ export function Header({ stepIndicator }: HeaderProps) {
         {t('header.skipToContent')}
       </a>
 
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-4" role="banner">
-        <div className="mx-auto max-w-7xl">
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-card px-6 py-3">
-            <div className="flex justify-between items-center">
-              {/* Logo - matching Closer Analytics style */}
-              <a
-                href="/"
-                className="flex items-center gap-2 flex-shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label={t('header.home')}
+      <header
+        className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
+        role="banner"
+      >
+        <div className="mx-auto w-[min(96%,1100px)] flex justify-between items-center">
+          {/* Logo */}
+          <a
+            href="/"
+            className="flex items-center gap-2.5 flex-shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label={t('header.home')}
+          >
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
               >
-                <span className="text-primary font-bold text-lg">CA</span>
-                <span className="text-gray-300 font-light">|</span>
-                <span className="font-medium text-gray-800">Closer AI</span>
-              </a>
-
-              {/* Step indicator (center) */}
-              {stepIndicator && (
-                <nav className="absolute left-1/2 -translate-x-1/2 hidden sm:block" aria-label="Wizard progress">
-                  {stepIndicator}
-                </nav>
-              )}
-
-              {/* Right side controls */}
-              <div className="flex items-center gap-2">
-                {/* Language Switch */}
-                <button
-                  onClick={toggleLanguage}
-                  aria-label={`Switch to ${language === 'nl' ? 'English' : 'Nederlands'}`}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  <svg
-                    className="w-4 h-4 text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium text-gray-600 uppercase">
-                    {language}
-                  </span>
-                </button>
-
-                {/* Profile button */}
-                <button
-                  onClick={handleOpenProfile}
-                  aria-label={t('header.openProfile')}
-                  aria-expanded={showProfile}
-                  aria-haspopup="dialog"
-                  className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary flex-shrink-0"
-                >
-                  <span className="text-sm font-medium text-gray-600">JD</span>
-                </button>
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
             </div>
+            <span className="font-semibold text-gray-800">Closer AI</span>
+          </a>
+
+          {/* Step indicator (center) */}
+          {stepIndicator && (
+            <nav className="absolute left-1/2 -translate-x-1/2 hidden sm:block" aria-label="Wizard progress">
+              {stepIndicator}
+            </nav>
+          )}
+
+          {/* Right side controls */}
+          <div className="flex items-center gap-1">
+            {/* Language Switch */}
+            <button
+              onClick={toggleLanguage}
+              aria-label={`Switch to ${language === 'nl' ? 'English' : 'Nederlands'}`}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                />
+              </svg>
+              <span className="text-sm font-medium uppercase">
+                {language}
+              </span>
+            </button>
+
+            {/* Profile button */}
+            <button
+              onClick={handleOpenProfile}
+              aria-label={t('header.openProfile')}
+              aria-expanded={showProfile}
+              aria-haspopup="dialog"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary flex-shrink-0"
+            >
+              <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </div>
+              <span className="text-sm text-gray-600 hidden sm:block">{t('header.profile')}</span>
+            </button>
           </div>
         </div>
       </header>
