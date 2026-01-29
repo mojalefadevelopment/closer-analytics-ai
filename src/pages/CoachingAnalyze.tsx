@@ -11,6 +11,7 @@ import {
   type ContextOptions,
 } from '../components/analysis'
 import { useCoachingAnalysis } from '../hooks/useCoachingAnalysis'
+import { useTranscriptHistory } from '../hooks/useTranscriptHistory'
 
 const INITIAL_CONTEXT: ContextOptions = {
   experience: null,
@@ -29,16 +30,20 @@ function WizardContent() {
     reset,
   } = useCoachingAnalysis()
 
+  const { addEntry } = useTranscriptHistory()
+
   const { nextStep } = useWizard()
 
   const [context, setContext] = useState<ContextOptions>(INITIAL_CONTEXT)
 
   const handleAnalyze = useCallback(async () => {
-    const success = await analyze(context)
-    if (success) {
+    const result = await analyze(context)
+    if (result) {
+      // Save to history
+      addEntry(transcript, context, result)
       nextStep()
     }
-  }, [analyze, context, nextStep])
+  }, [analyze, context, nextStep, addEntry, transcript])
 
   const handleReset = useCallback(() => {
     reset()

@@ -1,5 +1,6 @@
 import { useState, useCallback, ReactNode } from 'react'
 import { ProfilePanel } from './ProfilePanel'
+import { HistoryPanel } from '../history/HistoryPanel'
 import { useLanguage } from '../../lib/i18n'
 
 interface HeaderProps {
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 export function Header({ stepIndicator }: HeaderProps) {
   const [showProfile, setShowProfile] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
   const { language, toggleLanguage, t } = useLanguage()
 
   const handleOpenProfile = useCallback(() => {
@@ -16,6 +18,14 @@ export function Header({ stepIndicator }: HeaderProps) {
 
   const handleCloseProfile = useCallback(() => {
     setShowProfile(false)
+  }, [])
+
+  const handleOpenHistory = useCallback(() => {
+    setShowHistory(true)
+  }, [])
+
+  const handleCloseHistory = useCallback(() => {
+    setShowHistory(false)
   }, [])
 
   return (
@@ -67,6 +77,31 @@ export function Header({ stepIndicator }: HeaderProps) {
 
           {/* Right side controls */}
           <div className="flex items-center gap-1">
+            {/* History button */}
+            <button
+              onClick={handleOpenHistory}
+              aria-label={t('history.viewHistory')}
+              aria-expanded={showHistory}
+              aria-haspopup="dialog"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span className="text-sm hidden sm:block">{t('profile.history')}</span>
+            </button>
+
             {/* Language Switch */}
             <button
               onClick={toggleLanguage}
@@ -124,6 +159,9 @@ export function Header({ stepIndicator }: HeaderProps) {
 
       {/* Profile Panel */}
       <ProfilePanel isOpen={showProfile} onClose={handleCloseProfile} />
+
+      {/* History Panel */}
+      <HistoryPanel isOpen={showHistory} onClose={handleCloseHistory} />
     </>
   )
 }

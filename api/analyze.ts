@@ -147,7 +147,13 @@ export default async function handler(req: Request) {
       )
     }
 
-    const truncatedTranscript = transcript.slice(0, 32000)
+    // Groq free tier limit: 12K TPM. System prompt ~8K tokens, so limit transcript to ~3K tokens (~12K chars)
+    const MAX_TRANSCRIPT_CHARS = 12000
+    const truncatedTranscript = transcript.slice(0, MAX_TRANSCRIPT_CHARS)
+
+    if (transcript.length > MAX_TRANSCRIPT_CHARS) {
+      console.log(`[WARN] Transcript truncated from ${transcript.length} to ${MAX_TRANSCRIPT_CHARS} chars`)
+    }
 
     // Build personalized prompts based on context
     const analysisContext: AnalysisContext = {
@@ -227,12 +233,24 @@ export default async function handler(req: Request) {
       console.error('Stack trace:', error.stack)
     }
 
+    // Check for Groq rate limit errors
+    let userError = 'Analyse mislukt. Probeer opnieuw.'
+    let statusCode = 500
+
+    if (errorMessage.includes('rate_limit_exceeded') || errorMessage.includes('tokens per minute')) {
+      userError = 'Transcript te lang. Verkort het transcript en probeer opnieuw.'
+      statusCode = 413
+    } else if (errorMessage.includes('413') || errorMessage.includes('Request too large')) {
+      userError = 'Transcript te lang. Verkort het transcript en probeer opnieuw.'
+      statusCode = 413
+    }
+
     return new Response(
       JSON.stringify({
-        error: 'Analyse mislukt. Probeer opnieuw.',
+        error: userError,
         debug: errorMessage
       }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { status: statusCode, headers: { 'Content-Type': 'application/json' } }
     )
   }
 }

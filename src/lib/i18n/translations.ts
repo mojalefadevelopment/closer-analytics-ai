@@ -60,6 +60,7 @@ Closer: Goedemiddag, hoe gaat het vandaag?
 Prospect: Goed, dankjewel. Ik heb de informatie gelezen…`,
     'transcript.chars': 'karakters',
     'transcript.analyze': 'Analyseer',
+    'transcript.orPaste': 'of plak handmatig',
 
     // Results Step
     'results.title': 'Analyse Resultaat',
@@ -113,6 +114,32 @@ Prospect: Goed, dankjewel. Ik heb de informatie gelezen…`,
     'profile.help': 'Help & Support',
     'profile.logout': 'Uitloggen',
     'profile.language': 'Taal',
+
+    // History
+    'history.title': 'Analyse Geschiedenis',
+    'history.empty': 'Nog geen analyses',
+    'history.emptyHint': 'Je analyses worden hier opgeslagen',
+    'history.loading': 'Laden...',
+    'history.clearAll': 'Wis alles',
+    'history.confirmClear': 'Bevestig wissen',
+    'history.noSummary': 'Geen samenvatting',
+    'history.viewHistory': 'Bekijk geschiedenis',
+
+    // Fathom
+    'fathom.connectTitle': 'Verbind met Fathom',
+    'fathom.connectDesc': 'Importeer transcripten automatisch vanuit je Fathom meetings',
+    'fathom.connect': 'Verbind Fathom',
+    'fathom.connecting': 'Verbinden...',
+    'fathom.connected': 'Fathom verbonden',
+    'fathom.disconnect': 'Ontkoppel',
+    'fathom.loadMeetings': 'Laad meetings',
+    'fathom.loadingMeetings': 'Meetings laden...',
+    'fathom.selectMeeting': 'Selecteer een meeting om te analyseren:',
+    'fathom.loadingTranscript': 'Transcript laden...',
+    'fathom.untitledMeeting': 'Meeting zonder titel',
+    'fathom.proTitle': 'Fathom integratie',
+    'fathom.proDesc': 'Upgrade naar Pro om automatisch transcripten te importeren vanuit je Fathom meetings',
+    'fathom.upgrade': 'Upgrade naar Pro',
   },
   en: {
     // Header
@@ -171,6 +198,7 @@ Closer: Good afternoon, how are you today?
 Prospect: Good, thank you. I've read the information…`,
     'transcript.chars': 'characters',
     'transcript.analyze': 'Analyze',
+    'transcript.orPaste': 'or paste manually',
 
     // Results Step
     'results.title': 'Analysis Results',
@@ -224,6 +252,32 @@ Prospect: Good, thank you. I've read the information…`,
     'profile.help': 'Help & Support',
     'profile.logout': 'Log out',
     'profile.language': 'Language',
+
+    // History
+    'history.title': 'Analysis History',
+    'history.empty': 'No analyses yet',
+    'history.emptyHint': 'Your analyses will be saved here',
+    'history.loading': 'Loading...',
+    'history.clearAll': 'Clear all',
+    'history.confirmClear': 'Confirm clear',
+    'history.noSummary': 'No summary',
+    'history.viewHistory': 'View history',
+
+    // Fathom
+    'fathom.connectTitle': 'Connect to Fathom',
+    'fathom.connectDesc': 'Import transcripts automatically from your Fathom meetings',
+    'fathom.connect': 'Connect Fathom',
+    'fathom.connecting': 'Connecting...',
+    'fathom.connected': 'Fathom connected',
+    'fathom.disconnect': 'Disconnect',
+    'fathom.loadMeetings': 'Load meetings',
+    'fathom.loadingMeetings': 'Loading meetings...',
+    'fathom.selectMeeting': 'Select a meeting to analyze:',
+    'fathom.loadingTranscript': 'Loading transcript...',
+    'fathom.untitledMeeting': 'Untitled meeting',
+    'fathom.proTitle': 'Fathom Integration',
+    'fathom.proDesc': 'Upgrade to Pro to automatically import transcripts from your Fathom meetings',
+    'fathom.upgrade': 'Upgrade to Pro',
   },
 } as const
 

@@ -17,6 +17,20 @@ export interface CriticalMoment {
   suggestion?: string // Wat had beter gekund (bij negative)
 }
 
+export interface AnalysisContext {
+  experience: 'starter' | 'intermediate' | 'expert' | null
+  focus: 'bezwaren' | 'afsluiting' | 'rapport' | 'algemeen' | null
+  goal: 'closes' | 'tickets' | 'gesprekken' | null
+}
+
+export interface HistoryEntry {
+  id: string
+  timestamp: number
+  transcript: string
+  context: AnalysisContext
+  analysis: CoachingAnalysis
+}
+
 export interface CoachingAnalysis {
   // Samenvatting
   summary: {
