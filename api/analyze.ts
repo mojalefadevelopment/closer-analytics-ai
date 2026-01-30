@@ -10,7 +10,7 @@ export const config = {
 }
 
 // ============================================
-// EXPANDED SCHEMA - Matching src/types/coaching.ts
+// TYPES
 // ============================================
 
 interface CategoryScore {
@@ -60,6 +60,7 @@ interface CoachingAnalysis {
     reasoning: string
     confidence: 'high' | 'medium' | 'low'
     transcriptQuality: 'excellent' | 'good' | 'fair' | 'poor'
+    provider?: 'groq' | 'openai'
   }
 }
 
@@ -77,7 +78,6 @@ function logSection(title: string, content: unknown) {
   console.log(`[LOG] ${title}`)
   console.log('='.repeat(60))
   if (typeof content === 'string') {
-    // Truncate long strings for readability
     const maxLength = 2000
     if (content.length > maxLength) {
       console.log(content.slice(0, maxLength) + `\n... [truncated, ${content.length} total chars]`)
@@ -88,6 +88,109 @@ function logSection(title: string, content: unknown) {
     console.log(JSON.stringify(content, null, 2))
   }
 }
+
+// ============================================
+// AI PROVIDERS
+// ============================================
+
+interface AIResponse {
+  content: string
+  provider: 'groq' | 'openai'
+  model: string
+  usage?: { prompt_tokens?: number; completion_tokens?: number }
+}
+
+// Check if error is a rate limit error
+function isRateLimitError(error: unknown): boolean {
+  if (error instanceof Error) {
+    const msg = error.message.toLowerCase()
+    return msg.includes('rate_limit') ||
+           msg.includes('tokens per minute') ||
+           msg.includes('request too large') ||
+           msg.includes('413')
+  }
+  return false
+}
+
+// Call Groq API
+async function callGroq(
+  systemPrompt: string,
+  userPrompt: string,
+  apiKey: string
+): Promise<AIResponse> {
+  const groq = new Groq({ apiKey })
+
+  const completion = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    max_tokens: 2048,
+    temperature: 0.3,
+    response_format: { type: 'json_object' },
+  })
+
+  const content = completion.choices[0]?.message?.content
+  if (!content) {
+    throw new Error('No response from Groq')
+  }
+
+  return {
+    content,
+    provider: 'groq',
+    model: completion.model,
+    usage: completion.usage,
+  }
+}
+
+// Call OpenAI API (fallback)
+async function callOpenAI(
+  systemPrompt: string,
+  userPrompt: string,
+  apiKey: string
+): Promise<AIResponse> {
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 2048,
+      temperature: 0.3,
+      response_format: { type: 'json_object' },
+    }),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`OpenAI API error: ${response.status} ${errorText}`)
+  }
+
+  const data = await response.json()
+  const content = data.choices?.[0]?.message?.content
+
+  if (!content) {
+    throw new Error('No response from OpenAI')
+  }
+
+  return {
+    content,
+    provider: 'openai',
+    model: data.model,
+    usage: data.usage,
+  }
+}
+
+// ============================================
+// MAIN HANDLER
+// ============================================
 
 export default async function handler(req: Request) {
   const requestId = Math.random().toString(36).slice(2, 9)
@@ -114,11 +217,13 @@ export default async function handler(req: Request) {
   }
 
   try {
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
-      console.error('[ERROR] GROQ_API_KEY not configured')
+    const groqApiKey = process.env.GROQ_API_KEY
+    const openaiApiKey = process.env.OPENAI_API_KEY
+
+    if (!groqApiKey && !openaiApiKey) {
+      console.error('[ERROR] No API keys configured')
       return new Response(
-        JSON.stringify({ error: 'API configuratie fout. Check GROQ_API_KEY.' }),
+        JSON.stringify({ error: 'API configuratie fout. Check API keys.' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       )
     }
@@ -126,7 +231,6 @@ export default async function handler(req: Request) {
     const body: RequestBody = await req.json()
     const { transcript, context } = body
 
-    // Log incoming request
     logSection('INCOMING REQUEST', {
       transcriptLength: transcript?.length || 0,
       transcriptPreview: transcript?.slice(0, 500) + '...',
@@ -147,15 +251,10 @@ export default async function handler(req: Request) {
       )
     }
 
-    // Groq free tier limit: 12K TPM. System prompt ~8K tokens, so limit transcript to ~3K tokens (~12K chars)
-    const MAX_TRANSCRIPT_CHARS = 12000
-    const truncatedTranscript = transcript.slice(0, MAX_TRANSCRIPT_CHARS)
+    // OpenAI has higher limits, so we can allow longer transcripts when falling back
+    const MAX_TRANSCRIPT_CHARS_GROQ = 12000
+    const MAX_TRANSCRIPT_CHARS_OPENAI = 30000
 
-    if (transcript.length > MAX_TRANSCRIPT_CHARS) {
-      console.log(`[WARN] Transcript truncated from ${transcript.length} to ${MAX_TRANSCRIPT_CHARS} chars`)
-    }
-
-    // Build personalized prompts based on context
     const analysisContext: AnalysisContext = {
       experience: context?.experience || null,
       focus: context?.focus || null,
@@ -165,62 +264,97 @@ export default async function handler(req: Request) {
     logSection('ANALYSIS CONTEXT', analysisContext)
 
     const systemPrompt = buildSystemPrompt(analysisContext)
-    const userPrompt = buildUserPrompt(truncatedTranscript)
 
-    // Log the full prompts being sent
-    logSection('SYSTEM PROMPT (sent to LLM)', systemPrompt)
-    logSection('USER PROMPT (sent to LLM)', userPrompt)
+    let aiResponse: AIResponse
+    let usedProvider: 'groq' | 'openai' = 'groq'
 
-    const groq = new Groq({ apiKey })
+    // Try Groq first (faster & cheaper)
+    if (groqApiKey) {
+      const truncatedForGroq = transcript.slice(0, MAX_TRANSCRIPT_CHARS_GROQ)
+      const userPrompt = buildUserPrompt(truncatedForGroq)
 
-    console.log('\n[API] Sending request to Groq API...')
-    const startTime = Date.now()
+      if (transcript.length > MAX_TRANSCRIPT_CHARS_GROQ) {
+        console.log(`[WARN] Transcript truncated for Groq: ${transcript.length} -> ${MAX_TRANSCRIPT_CHARS_GROQ} chars`)
+      }
 
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      max_tokens: 2048, // Increased for expanded schema
-      temperature: 0.3,
-      response_format: { type: 'json_object' },
-    })
+      logSection('SYSTEM PROMPT', systemPrompt)
+      logSection('USER PROMPT', userPrompt)
 
-    const duration = Date.now() - startTime
-    console.log(`[API] Groq API responded in ${duration}ms`)
+      console.log('\n[API] Trying Groq API first...')
+      const startTime = Date.now()
 
-    // Log raw API response
-    logSection('RAW GROQ RESPONSE', {
-      id: completion.id,
-      model: completion.model,
-      usage: completion.usage,
-      finishReason: completion.choices[0]?.finish_reason,
-    })
+      try {
+        aiResponse = await callGroq(systemPrompt, userPrompt, groqApiKey)
+        usedProvider = 'groq'
+        console.log(`[API] Groq responded in ${Date.now() - startTime}ms`)
+      } catch (groqError) {
+        console.error('[API] Groq failed:', groqError instanceof Error ? groqError.message : groqError)
 
-    const content = completion.choices[0]?.message?.content
-    if (!content) {
-      throw new Error('No response from Groq')
+        // Fallback to OpenAI if available and it's a rate limit error
+        if (openaiApiKey && isRateLimitError(groqError)) {
+          console.log('[API] Falling back to OpenAI...')
+
+          // Use longer transcript for OpenAI
+          const truncatedForOpenAI = transcript.slice(0, MAX_TRANSCRIPT_CHARS_OPENAI)
+          const userPromptOpenAI = buildUserPrompt(truncatedForOpenAI)
+
+          const openaiStartTime = Date.now()
+          aiResponse = await callOpenAI(systemPrompt, userPromptOpenAI, openaiApiKey)
+          usedProvider = 'openai'
+          console.log(`[API] OpenAI responded in ${Date.now() - openaiStartTime}ms`)
+        } else {
+          throw groqError
+        }
+      }
+    } else if (openaiApiKey) {
+      // Only OpenAI configured
+      const truncatedForOpenAI = transcript.slice(0, MAX_TRANSCRIPT_CHARS_OPENAI)
+      const userPrompt = buildUserPrompt(truncatedForOpenAI)
+
+      logSection('SYSTEM PROMPT', systemPrompt)
+      logSection('USER PROMPT', userPrompt)
+
+      console.log('\n[API] Using OpenAI (no Groq key)...')
+      const startTime = Date.now()
+      aiResponse = await callOpenAI(systemPrompt, userPrompt, openaiApiKey)
+      usedProvider = 'openai'
+      console.log(`[API] OpenAI responded in ${Date.now() - startTime}ms`)
+    } else {
+      throw new Error('No API keys available')
     }
 
-    logSection('RAW JSON CONTENT FROM LLM', content)
+    logSection('AI RESPONSE', {
+      provider: aiResponse.provider,
+      model: aiResponse.model,
+      usage: aiResponse.usage,
+    })
+
+    logSection('RAW JSON CONTENT', aiResponse.content)
 
     // Parse and validate
-    const analysis: CoachingAnalysis = JSON.parse(content)
+    const analysis: CoachingAnalysis = JSON.parse(aiResponse.content)
 
-    logSection('PARSED ANALYSIS OBJECT', analysis)
+    // Add provider info to meta
+    if (analysis._meta) {
+      analysis._meta.provider = usedProvider
+    } else {
+      analysis._meta = {
+        reasoning: '',
+        confidence: 'medium',
+        transcriptQuality: 'good',
+        provider: usedProvider,
+      }
+    }
 
-    // Log summary stats
+    logSection('PARSED ANALYSIS', analysis)
+
     console.log('\n[SUMMARY] ANALYSIS SUMMARY:')
+    console.log(`   - Provider: ${usedProvider}`)
     console.log(`   - Scores: ${analysis.scores?.map(s => `${s.category}=${s.score}`).join(', ')}`)
     console.log(`   - Strengths: ${analysis.strengths?.length || 0}`)
     console.log(`   - Critical Moments: ${analysis.criticalMoments?.length || 0}`)
     console.log(`   - Action Points: ${analysis.actionPoints?.length || 0}`)
     console.log(`   - Observations: ${analysis.observations?.length || 0}`)
-    if (analysis._meta) {
-      console.log(`   - AI Confidence: ${analysis._meta.confidence}`)
-      console.log(`   - Transcript Quality: ${analysis._meta.transcriptQuality}`)
-    }
 
     return new Response(JSON.stringify(analysis), {
       headers: { 'Content-Type': 'application/json' },
@@ -233,16 +367,12 @@ export default async function handler(req: Request) {
       console.error('Stack trace:', error.stack)
     }
 
-    // Check for Groq rate limit errors
     let userError = 'Analyse mislukt. Probeer opnieuw.'
     let statusCode = 500
 
-    if (errorMessage.includes('rate_limit_exceeded') || errorMessage.includes('tokens per minute')) {
-      userError = 'Transcript te lang. Verkort het transcript en probeer opnieuw.'
-      statusCode = 413
-    } else if (errorMessage.includes('413') || errorMessage.includes('Request too large')) {
-      userError = 'Transcript te lang. Verkort het transcript en probeer opnieuw.'
-      statusCode = 413
+    if (isRateLimitError(error)) {
+      userError = 'API limiet bereikt. Probeer het later opnieuw.'
+      statusCode = 429
     }
 
     return new Response(
