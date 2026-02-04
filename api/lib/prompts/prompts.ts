@@ -41,34 +41,36 @@ export const OUTPUT_RULES_BASE = [
 export const OUTPUT_RULES_BY_EXPERIENCE = {
   starter: [
     ...OUTPUT_RULES_BASE,
-    'MAXIMAAL 1-2 actionPoints - niet overweldigen',
-    'MAXIMAAL 2 observations',
-    'Gebruik EENVOUDIGE taal, geen jargon',
+    'Geef 3-4 actionPoints - genoeg om te groeien, niet overweldigend',
+    'Geef 3-4 observations met waardevolle quotes',
+    'Gebruik EENVOUDIGE taal, geen vakjargon',
     'Leg bij elke actie uit WAAROM het werkt',
-    'Geef LETTERLIJKE voorbeeldzinnen die ze kunnen kopiëren',
+    'Geef LETTERLIJKE voorbeeldzinnen die ze kunnen kopiëren - maak voorbeelden UITGEBREID (2-3 zinnen)',
     'Wees bemoedigend - benoem ook wat goed gaat',
-    'Houd zinnen kort en simpel',
+    'Houd uitleg simpel maar voorbeelden concreet en gedetailleerd',
   ],
   intermediate: [
     ...OUTPUT_RULES_BASE,
-    'Maximaal 3 actionPoints',
-    'Maximaal 3 observations',
+    'Geef 5-6 actionPoints - gedetailleerd en praktisch',
+    'Geef 4-5 observations met specifieke quotes',
     'Geen basis uitleg - ze kennen de fundamentals',
     'Focus op WAAROM ze bepaalde keuzes maken',
     'Benoem patronen die je ziet',
     'Push ze naar de volgende stap',
     'Wees direct, geen pluisjes',
+    'Voorbeeldzinnen moeten UITGEBREID zijn - toon het volledige gespreksfragment (2-4 zinnen)',
   ],
   expert: [
     ...OUTPUT_RULES_BASE,
-    'Maximaal 3 actionPoints - maar mag ook 1 zijn als die ene krachtig is',
-    'Maximaal 3 observations',
+    'Geef 4-5 actionPoints - gefocust op strategische nuances. Begeleid door goede duidelijke te geven en de "Why" goed uiteen te zetten',
+    'Geef 4-5 observations met diepgaande analyse, gebruik een beetje storytelling',
     'GEEN basis uitleg - dat is beledigend',
     'Focus op subtiliteiten en nuance',
-    'Wees confronterend over blinde vlekken',
-    'Denk strategisch, niet tactisch',
-    'Stel hun aannames ter discussie',
+    'Wees confronterend over blinde vlekken en valkuilen, korte en lange termijn visie',
+    'Denk strategisch, niet tactisch en wees concreet',
+    'Stel hun aannames ter discussie, benoem concrete momenten in het gesprek en de waarom',
     'Benoem de ONDERLIGGENDE patronen, niet de symptomen',
+    'Geef UITGEBREIDE voorbeelden die het volledige moment en alternatief tonen (3-5 zinnen)',
   ],
 }
 
@@ -267,6 +269,84 @@ export const HIGH_TICKET_FRAMEWORKS = {
         example: '"Het is €497 per maand. Dat is €16 per dag. Minder dan je koffie en lunch. Eén extra deal per maand en je hebt het 10x terugverdiend."',
       },
     ],
+  },
+}
+
+// ===========================================
+// PSYCHOLOGISCHE PRINCIPES (INTERNE REFERENTIE)
+// ===========================================
+// Deze principes zijn ACHTERGRONDKENNIS voor de AI.
+// NOOIT expliciet benoemen in output ("het principe hierachter is...")
+// WEL de inzichten natuurlijk verwerken in feedback zoals een coach zou doen.
+
+export const PSYCHOLOGY_PRINCIPLES = {
+  // Cialdini's 6 Principles of Influence
+  reciprocity: {
+    name: 'Reciprociteit',
+    explanation: 'Mensen voelen zich verplicht iets terug te geven wanneer ze iets ontvangen.',
+    inSales: 'Geef eerst waarde (inzicht, advies, tijd) voordat je iets vraagt. De prospect voelt zich dan verplicht om serieus naar je aanbod te kijken.',
+  },
+  commitment: {
+    name: 'Commitment & Consistentie',
+    explanation: 'Mensen willen consistent zijn met wat ze eerder hebben gezegd of gedaan.',
+    inSales: 'Laat de prospect kleine "ja\'s" geven door het gesprek heen. Als ze 5x ja hebben gezegd, is de 6e ja (de close) veel makkelijker.',
+  },
+  socialProof: {
+    name: 'Social Proof',
+    explanation: 'Mensen kijken naar anderen om te bepalen wat correct gedrag is.',
+    inSales: 'Noem specifieke resultaten van vergelijkbare klanten: "Een ander recruitment bureau van jullie grootte haalde binnen 3 maanden..."',
+  },
+  authority: {
+    name: 'Autoriteit',
+    explanation: 'Mensen volgen experts en autoriteiten.',
+    inSales: 'Positioneer jezelf als de expert (Doctor Frame). Stel diagnose-vragen in plaats van te pitchen.',
+  },
+  liking: {
+    name: 'Liking',
+    explanation: 'Mensen kopen van mensen die ze mogen.',
+    inSales: 'Bouw eerst rapport. Vind gemeenschappelijke grond. Wees oprecht geïnteresseerd in hun situatie.',
+  },
+  scarcity: {
+    name: 'Schaarste',
+    explanation: 'Mensen waarderen dingen meer als ze schaars of beperkt zijn.',
+    inSales: 'Creëer urgentie: beperkte plekken, prijsverhoging, of de "cost of waiting".',
+  },
+
+  // Andere belangrijke principes
+  lossAversion: {
+    name: 'Loss Aversion',
+    explanation: 'Mensen zijn 2x gemotiveerder om verlies te voorkomen dan om winst te behalen.',
+    inSales: 'Frame het probleem als wat ze VERLIEZEN door niet te handelen, niet wat ze winnen door wel te handelen. "Elke maand kost dit je €5.000 aan gemiste omzet."',
+  },
+  painPleasure: {
+    name: 'Pain vs Pleasure Principle',
+    explanation: 'Mensen bewegen weg van pijn sneller dan naar plezier toe.',
+    inSales: 'Verdiep de pijn voordat je de oplossing presenteert. De prospect moet de pijn VOELEN, niet alleen weten.',
+  },
+  ownership: {
+    name: 'Endowment Effect / Ownership',
+    explanation: 'Mensen waarderen iets meer zodra ze het als "van hen" beschouwen.',
+    inSales: 'Laat de prospect zichzelf visualiseren met de oplossing: "Stel je voor, over 90 dagen heb je..."',
+  },
+  selfPersuasion: {
+    name: 'Self-Persuasion',
+    explanation: 'Mensen geloven hun eigen conclusies meer dan claims van anderen.',
+    inSales: 'Stel vragen die de prospect zelf laten concluderen dat ze je oplossing nodig hebben. Vertel niet, vraag.',
+  },
+  cognitiveDissonance: {
+    name: 'Cognitieve Dissonantie',
+    explanation: 'Mensen ervaren ongemak wanneer hun acties niet overeenkomen met hun overtuigingen.',
+    inSales: 'Als iemand zegt "dit is belangrijk voor me" maar niet wil investeren, benoem dit: "Je zegt dat X prioriteit is, maar je wilt er niet in investeren. Help me dat begrijpen."',
+  },
+  anchoring: {
+    name: 'Anchoring',
+    explanation: 'De eerste informatie die mensen horen beïnvloedt hun oordeel over alles wat daarna komt.',
+    inSales: 'Noem eerst de totale waarde (€15.000) voordat je de prijs noemt (€5.000). Of noem eerst wat het probleem ze kost (€50.000/jaar) voordat je de investering noemt.',
+  },
+  framingEffect: {
+    name: 'Framing Effect',
+    explanation: 'Hoe informatie wordt gepresenteerd beïnvloedt hoe mensen reageren.',
+    inSales: 'Frame het als "investering" niet "kosten". Frame het als "€16 per dag" niet "€500 per maand".',
   },
 }
 
@@ -1635,25 +1715,25 @@ export const JSON_FORMAT = `{
       "category": "rapport",
       "score": [1-10],
       "label": "Rapport",
-      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+      "feedback": "[SPECIFIEK verbeterpunt gebaseerd op DIT gesprek. Verwijs naar een concreet moment. Voorbeeld: 'Vraag bij de opening naar hun weekend voordat je naar business gaat - bij minuut 0:08 ging je te snel.']"
     },
     {
       "category": "discovery",
       "score": [1-10],
       "label": "Discovery",
-      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+      "feedback": "[SPECIFIEK verbeterpunt gebaseerd op DIT gesprek. Verwijs naar gemiste doorvraag of goed moment.]"
     },
     {
       "category": "objections",
       "score": [1-10],
       "label": "Bezwaren",
-      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+      "feedback": "[SPECIFIEK verbeterpunt. Bij bezwaar X had je kunnen vragen: 'concrete vraag'. Of: Geen bezwaren in dit gesprek.]"
     },
     {
       "category": "closing",
       "score": [1-10],
       "label": "Closing",
-      "feedback": "[CONCREET VERBETERPUNT met voorbeeldzin. Begin met werkwoord. Max 20 woorden.]"
+      "feedback": "[SPECIFIEK verbeterpunt. Verwijs naar het close-moment of gemiste kans met alternatieve aanpak.]"
     }
   ],
   "strengths": [
@@ -1672,20 +1752,20 @@ export const JSON_FORMAT = `{
   ],
   "priority": {
     "title": "[Eén zin: de belangrijkste verandering, max 12 woorden]",
-    "explanation": "[2-3 zinnen waarom dit prioriteit #1 is]",
-    "immediateAction": "[Exacte zin of vraag die ze in hun VOLGENDE gesprek kunnen gebruiken]"
+    "explanation": "[2-3 zinnen waarom dit prioriteit #1 is - spreek als een directe coach, niet als een textbook. Voorbeeld: 'Kevin gaf je het perfecte moment om hem zelf te laten rekenen, en je liet het liggen. Als HIJ de €7.500 per week uitrekent, hoef jij hem niet meer te overtuigen - hij heeft zichzelf al overtuigd.']",
+    "immediateAction": "[CONCRETE voorbeeldzin die past bij de situatie uit dit transcript. Niet generiek maar specifiek. Voorbeeld: 'Wanneer Kevin zegt dat hij moet overleggen, vraag: Kevin, stel je partner vraagt wat JIJ ervan vindt - wat zou je dan zeggen?']"
   },
   "actionPoints": [
     {
       "action": "[Concrete actie, begint met werkwoord, max 10 woorden]",
-      "why": "[Eén zin waarom dit werkt]",
-      "example": "[Voorbeeldzin die ze letterlijk kunnen gebruiken]"
+      "why": "[Leg NATUURLIJK uit waarom dit werkt - geen 'het principe hierachter is...' of 'psychologisch gezien...' Schrijf zoals een ervaren coach praat. Voorbeelden: 'Als Kevin zelf de rekening maakt, wordt het ZIJN conclusie - en zijn eigen conclusie hoef je niet te verkopen.' Of: 'Je stopt te vroeg. De eerste laag is nooit de echte pijn - je moet doorgraven tot je de emotie raakt.' Of: 'Mensen bewegen sneller weg van pijn dan naar plezier. Daarom werkt 'wat kost het je' beter dan 'wat levert het op'.']",
+      "example": "[UITGEBREID voorbeeld (3-5 zinnen) dat SPECIFIEK past bij dit transcript. Gebruik de namen en situatie uit het gesprek. Voorbeeld: 'Kevin zei dat hij 150 uur per week kwijt is aan administratie. Vraag dan: Kevin, stel die 150 uur wordt 50 uur - wat zou je met die extra 100 uur doen? [wacht op antwoord] En hoeveel extra plaatsingen zou dat betekenen? [laat hem rekenen] Precies, dat is €X extra omzet per maand.']"
     }
   ],
   "observations": [
     {
       "quote": "[Exacte quote uit transcript - MOET letterlijk in transcript staan]",
-      "insight": "[Wat dit onthult over de closer, max 15 woorden]",
+      "insight": "[Wat dit specifiek onthult over de closer's aanpak, niet generiek]",
       "category": "[rapport | discovery | objections | closing | general]"
     }
   ],
@@ -1792,8 +1872,31 @@ STAP 4: BEPAAL DE #1 PRIORITEIT
 
 STAP 5: FORMULEER ACTIONABLE FEEDBACK
 - Elke actie moet beginnen met een WERKWOORD
-- Geef VOORBEELDZINNEN die ze letterlijk kunnen gebruiken
+- KRITISCH: Alle feedback moet SPECIFIEK zijn voor DIT gesprek - geen generieke adviezen!
+  - FOUT: "Vraag om de sale" (te vaag)
+  - GOED: "Toen Kevin zei 'ik moet overleggen' had je kunnen vragen: 'Kevin, wat denk JIJ zelf - is dit iets wat jullie probleem oplost?'"
+- Gebruik de NAMEN uit het transcript in je voorbeelden
+- Verwijs naar SPECIFIEKE MOMENTEN (timestamps of quotes) waar iets goed/fout ging
+- Geef UITGEBREIDE VOORBEELDZINNEN (3-5 zinnen per voorbeeld) die PASSEN bij de situatie uit dit gesprek
+- Toon het volledige gespreksfragment met context: wat de prospect zei, wat de closer had kunnen antwoorden
+- Geef minstens 5 actionPoints met concrete, transcript-specifieke voorbeelden
 - Quotes moeten EXACT uit het transcript komen
+
+STAP 6: SCHRIJF ALS EEN ERVAREN COACH, NIET ALS EEN TEXTBOOK
+Leg uit WAAROM iets werkt, maar doe dit NATUURLIJK - zoals een mentor die naast je zit.
+
+NIET ZO (te academisch, AI-achtig):
+❌ "Het psychologische principe hierachter is loss aversion..."
+❌ "Dit werkt vanwege het consistency principe..."
+❌ "Psychologisch gezien reageren mensen..."
+
+WEL ZO (natuurlijk, als een coach):
+✅ "Als Kevin zelf de rekening maakt, wordt het ZIJN conclusie - en zijn eigen conclusie hoef je niet te verkopen."
+✅ "Je stopt te vroeg. De eerste laag is nooit de echte pijn - je moet doorgraven tot je de emotie raakt."
+✅ "Mensen bewegen sneller weg van pijn dan naar plezier. Daarom werkt 'wat kost het je' beter dan 'wat levert het op'."
+✅ "Hij zei al 3x ja. Dat momentum moet je gebruiken - niet wachten tot hij weer gaat twijfelen."
+✅ "Je gaf hem de uitkomst cadeau. Laat HEM het uitrekenen, dan is het ZIJN overtuiging."
+✅ "Je ging in de verkoop-stand. Stop daarmee. Stel vragen als een dokter die een diagnose stelt."
 
 ═══════════════════════════════════════════
 OUTPUT FORMAT - STRICT JSON
@@ -1806,9 +1909,25 @@ BELANGRIJKE REGELS:
 ═══════════════════════════════════════════
 1. Quotes MOETEN letterlijk uit het transcript komen - verzin NIETS
 2. Als er geen bezwaren waren, geef score 5 en zeg "Geen bezwaren in dit gesprek"
-3. Strengths zijn VERPLICHT - vind minstens 1 ding dat goed ging
-4. Antwoord ALLEEN met valid JSON, geen andere tekst
-5. Alle feedback in het NEDERLANDS
+3. Strengths zijn VERPLICHT - vind minstens 1-2 dingen die goed gingen
+4. Geef MINSTENS 5 actionPoints met UITGEBREIDE voorbeelden (3-5 zinnen per voorbeeld)
+5. Voorbeelden moeten het VOLLEDIGE gespreksfragment tonen met context
+6. Antwoord ALLEEN met valid JSON, geen andere tekst
+7. Alle feedback in het NEDERLANDS
+
+═══════════════════════════════════════════
+KRITISCH - VERMIJD GENERIEKE FEEDBACK:
+═══════════════════════════════════════════
+NOOIT dit soort vage feedback geven:
+❌ "De closer moet direct om de sale vragen"
+❌ "Stel meer open vragen"
+❌ "Bouw meer rapport"
+❌ "Luister beter naar de prospect"
+
+ALTIJD specifiek zijn:
+✅ "Bij 3:42 zei Marco 'ik werk 60-70 uur per week' - dit is het perfecte moment om door te vragen: 'Marco, hoe lang gaat dit al zo? En wat kost dit je thuis?'"
+✅ "Kevin noemde 150 uur administratie per week. Bereken dit live: 'Kevin, 150 uur tegen €50/uur is €7.500 per week aan verloren productiviteit. Klopt dat?'"
+✅ "Toen Sandra zei 'ik voel me niet gehoord' was dit het moment om te stoppen en te vragen: 'Sandra, je hebt gelijk. Wat is het belangrijkste dat ik moet weten over jouw situatie?'"
 
 Geef ALLEEN valid JSON terug.`
 }
